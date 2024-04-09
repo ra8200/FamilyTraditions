@@ -12,19 +12,19 @@ const RecipeBookCard = ({ title, imageUrl, onPress }) => {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    width: 150, // Adjust the width as necessary
-    marginRight: 15, // For spacing between items if in a horizontal list
+    width: 150, 
+    marginRight: 15, 
   },
   image: {
-    width: '100%', // Makes sure the image covers the width of the container
-    height: 100, // Fixed height for the images, adjust as necessary
-    borderRadius: 8, // Optional: if you want rounded corners
+    width: '100%',
+    height: 100,
+    borderRadius: 8,
   },
   title: {
     marginTop: 8,
     fontSize: 16,
     fontWeight: 'bold',
-    textAlign: 'center', // Ensures the title is centered below the image
+    textAlign: 'center',
   },
 });
 
