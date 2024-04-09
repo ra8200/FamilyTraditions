@@ -1,4 +1,3 @@
-// app.js
 const { Query } = require('pg');
 const postgres = require('postgres');
 require('dotenv').config();

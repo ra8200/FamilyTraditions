@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, FlatList, Button, Image } from 'react-native';
-import RecipeCard from './components/RecipeCard'; // Adjust the import path as needed
+import RecipeCard from '../components/RecipeCard'; // Adjust the import path as needed
 
 const BookScreen = ({ route, navigation }) => {
   // Placeholder data for recipes within the book
