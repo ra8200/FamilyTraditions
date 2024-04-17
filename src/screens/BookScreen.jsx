@@ -34,6 +34,10 @@ const BookScreen = ({ route, navigation }) => {
         keyExtractor={item => item.id}
       />
       <Button
+        title="Family Members"
+        onPress={() => navigation.navigate('FamilyMembersScreen', { bookId })}
+      />
+      <Button
         title="Add New Recipe"
         onPress={() => navigation.navigate('CreateRecipeScreen', { bookId })}
       />

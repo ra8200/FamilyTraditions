@@ -5,9 +5,13 @@ const AddMemberModal = ({ isVisible, onClose, onAddMember }) => {
   const [memberEmail, setMemberEmail] = useState('');
 
   const handleAdd = () => {
-    onAddMember(memberEmail);
-    setMemberEmail(''); // Reset input field
-    onClose(); // Close modal
+    if (memberEmail.trim()) { // Simple validation to ensure input is not empty
+      onAddMember(memberEmail);
+      setMemberEmail(''); // Reset input field
+      onClose(); // Close modal
+    } else {
+      alert('Please enter a valid email.'); // Provide user feedback
+    }
   };
 
   return (
@@ -41,10 +45,15 @@ const FamilyMembersScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleAddMember = (email) => {
-    console.log('Member added:', email);
-    // Here you'd typically update the state to include the new member or invoke backend logic
+    const newMember = {
+      id: String(members.length + 1), // Simple generation of ID
+      name: email, // Assuming the email as name for simplicity
+      role: 'Viewer' // Default role
+    };
+    setMembers([...members, newMember]); // Add the new member to the list
     setModalVisible(false); // Close the modal after adding
   };
+  
 
   return (
     <View style={styles.container}>
