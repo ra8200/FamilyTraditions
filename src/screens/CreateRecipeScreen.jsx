@@ -61,7 +61,6 @@ const CreateRecipeScreen = ({ navigation }) => {
       </View>
 
       <Button title="Pick an Image" onPress={pickImage} />
-      {/* Display the selected image if available */}
       {image && <Image source={{ uri: image }} style={styles.previewImage} />}
 
       <Button

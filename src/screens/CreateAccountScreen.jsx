@@ -4,7 +4,6 @@ import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity } from 'rea
 const CreateAccountScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // Add other state variables as needed
 
   const handleCreateAccount = () => {
     // Placeholder for account creation logic
@@ -28,7 +27,6 @@ const CreateAccountScreen = ({ navigation }) => {
         placeholder="Password"
         secureTextEntry
       />
-      {/* Add other input fields as necessary */}
       <Button title="Create Account" onPress={handleCreateAccount} />
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Text style={styles.linkText}>Already have an account? Login</Text>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, Alert, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
-const CreateRecipeBookScreen = ({ navigation }) => {
+const CreateBookScreen = ({ navigation }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
@@ -23,7 +23,6 @@ const CreateRecipeBookScreen = ({ navigation }) => {
   const handleSubmit = () => {
     // Placeholder for submission logic
     Alert.alert('Recipe Book Created', `Book Title: ${title}`);
-    // Here, you'd typically call a backend service to create the recipe book
   };
 
   return (
@@ -80,4 +79,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateRecipeBookScreen;
+export default CreateBookScreen;

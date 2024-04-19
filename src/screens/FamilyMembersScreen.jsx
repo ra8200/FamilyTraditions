@@ -5,12 +5,12 @@ const AddMemberModal = ({ isVisible, onClose, onAddMember }) => {
   const [memberEmail, setMemberEmail] = useState('');
 
   const handleAdd = () => {
-    if (memberEmail.trim()) { // Simple validation to ensure input is not empty
+    if (memberEmail.trim()) { 
       onAddMember(memberEmail);
-      setMemberEmail(''); // Reset input field
-      onClose(); // Close modal
+      setMemberEmail(''); 
+      onClose();
     } else {
-      alert('Please enter a valid email.'); // Provide user feedback
+      alert('Please enter a valid email.');
     }
   };
 
@@ -46,12 +46,12 @@ const FamilyMembersScreen = () => {
 
   const handleAddMember = (email) => {
     const newMember = {
-      id: String(members.length + 1), // Simple generation of ID
-      name: email, // Assuming the email as name for simplicity
-      role: 'Viewer' // Default role
+      id: String(members.length + 1), 
+      name: email, 
+      role: 'Viewer' 
     };
-    setMembers([...members, newMember]); // Add the new member to the list
-    setModalVisible(false); // Close the modal after adding
+    setMembers([...members, newMember]); 
+    setModalVisible(false); 
   };
   
 

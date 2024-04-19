@@ -1,16 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList, Button, Image } from 'react-native';
-import RecipeCard from '../components/RecipeCard'; // Adjust the import path as needed
+import RecipeCard from '../components/RecipeCard';
 
+// Placeholder data for recipes within the book
 const BookScreen = ({ route, navigation }) => {
-  // Placeholder data for recipes within the book
-  const recipes = [
+  const { bookId, bookTitle, bookImageUrl } = route.params;
+  const [recipes, setRecipes] = useState([
     { id: '1', title: 'Grandma\'s Apple Pie', imageUrl: 'https://example.com/apple_pie.jpg', summary: 'A delicious traditional apple pie.' },
     { id: '2', title: 'Uncle Joe\'s BBQ Ribs', imageUrl: 'https://example.com/bbq_ribs.jpg', summary: 'Smokey, savory BBQ ribs.' },
-    // Add more recipes
-  ];
+  ]);
 
-  const { bookId, bookTitle, bookImageUrl } = route.params;
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      try {
+        const response = await fetch(`https://yourapi.com/api/books/${bookId}/recipes`);
+        const data = await response.json();
+        setRecipes(data);
+      } catch (error) {
+        console.error('Failed to fetch recipes:', error);
+      }
+    };
+
+    fetchRecipes();
+  }, [bookId]);
 
   const renderRecipe = ({ item }) => (
     <RecipeCard
@@ -23,7 +35,6 @@ const BookScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* Optionally use an image as a banner if the book has a cover image */}
       {bookImageUrl && (
         <Image source={{ uri: bookImageUrl }} style={styles.banner} />
       )}
@@ -35,11 +46,11 @@ const BookScreen = ({ route, navigation }) => {
       />
       <Button
         title="Family Members"
-        onPress={() => navigation.navigate('FamilyMembersScreen', { bookId })}
+        onPress={() => navigation.navigate('FamilyMembers', { bookId: route.params.bookId })}
       />
       <Button
         title="Add New Recipe"
-        onPress={() => navigation.navigate('CreateRecipeScreen', { bookId })}
+        onPress={() => navigation.navigate('CreateRecipeScreen', { bookId: route.params.bookId })}
       />
     </View>
   );
