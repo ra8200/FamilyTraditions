@@ -13,7 +13,7 @@ const RecipeBookCard = ({ title, imageUrl, onPress }) => {
 const styles = StyleSheet.create({
   cardContainer: {
     width: 150, 
-    marginRight: 15, 
+    marginRight: 15,
   },
   image: {
     width: '100%',

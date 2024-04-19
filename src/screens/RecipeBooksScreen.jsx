@@ -7,14 +7,13 @@ const RecipeBooksScreen = ({ navigation }) => {
   const recipeBooks = [
     { id: '1', title: 'Family Favorites', imageUrl: 'https://example.com/family_favorites.jpg' },
     { id: '2', title: 'Holiday Specials', imageUrl: 'https://example.com/holiday_specials.jpg' },
-    // Add more books with their respective image URLs
   ];
 
-  const renderBook = ({ item }) => (
+  const renderItem = ({ item }) => (
     <RecipeBookCard
       title={item.title}
-      imageUrl={item.imageUrl} // Ensure your data includes image URLs
-      onPress={() => navigation.navigate('BookScreen', { bookId: item.id })}
+      imageUrl={item.imageUrl}
+      onPress={() => navigation.navigate('Book', { bookId: item.id })}
     />
   );
 
@@ -23,12 +22,12 @@ const RecipeBooksScreen = ({ navigation }) => {
       <Text style={styles.title}>My Recipe Books</Text>
       <FlatList
         data={recipeBooks}
-        renderItem={renderBook}
+        renderItem={renderItem}
         keyExtractor={item => item.id}
       />
       <Button
         title="Create New Book"
-        onPress={() => navigation.navigate('CreateRecipeBookScreen')}
+        onPress={() => navigation.navigate('CreateBook')}
       />
     </View>
   );

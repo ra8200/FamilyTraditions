@@ -6,7 +6,6 @@ const UserAccountScreen = ({ navigation }) => {
   const userInfo = {
     name: 'Jane Doe',
     email: 'jane.doe@example.com',
-    // Add more user-specific details as needed
   };
 
   return (
@@ -14,7 +13,6 @@ const UserAccountScreen = ({ navigation }) => {
       <Text style={styles.title}>My Account</Text>
       <Text style={styles.userInfo}>Name: {userInfo.name}</Text>
       <Text style={styles.userInfo}>Email: {userInfo.email}</Text>
-      {/* Display more user info as needed */}
       <Button
         title="Edit Profile"
         onPress={() => console.log('Navigate to Edit Profile Screen')}
@@ -23,7 +21,7 @@ const UserAccountScreen = ({ navigation }) => {
         title="My Recipe Books"
         onPress={() => navigation.navigate('RecipeBooksScreen')}
       />
-      {/* Include more options as necessary */}
+  
     </View>
   );
 };

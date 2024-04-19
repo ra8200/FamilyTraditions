@@ -6,7 +6,6 @@ const mockRecipes = [
   { id: '1', title: 'Grandma’s Apple Pie', category: 'Dessert' },
   { id: '2', title: 'Uncle Joe’s Chili', category: 'Main Dish' },
   { id: '3', title: 'Aunt May’s Veggie Salad', category: 'Salad' },
-  // Add more recipes for prototyping
 ];
 
 function HomeScreen({ navigation }) {

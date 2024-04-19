@@ -1,9 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
 
-const RecipeScreen = ({ route }) => {
-  // Placeholder data - replace this with actual data passed via navigation or fetched from your database
-  const { recipe } = route.params; // Assuming recipe is passed as a parameter
+const RecipeScreen = ({ route, navigation }) => {
+  // Placeholder data
+  const { recipeId } = route.params;
+  const [recipe, setRecipe] = useState(null);
+
+  useEffect(() => {
+    const fetchRecipe = async () => {
+      try {
+        const response = await fetch(`https://yourapi.com/api/recipes/${recipeId}`);
+        const json = await response.json();
+        setRecipe(json);
+      } catch (error) {
+        console.error('Failed to fetch recipe:', error);
+      }
+    };
+
+    fetchRecipe();
+  }, [recipeId]);
+
+  if (!recipe) {
+    return <Text>Loading...</Text>; // Handle loading state
+  }
 
   return (
     <ScrollView style={styles.container}>

@@ -25,7 +25,6 @@ function AppNavigator() {
               case 'UserAccount':
                 iconName = focused ? 'person' : 'person-outline';
                 break;
-              // Add other cases as necessary
               default:
                 iconName = 'alert-circle-outline';
             }
@@ -38,7 +37,6 @@ function AppNavigator() {
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="RecipeBooksScreen" component={RecipeBookStack} options={{ headerShown: false, title: 'Recipe Books' }} />
         <Tab.Screen name="UserAccount" component={UserAccountScreen} />
-        {/* Include other tabs/screens as necessary */}
       </Tab.Navigator>
     </NavigationContainer>
   );
