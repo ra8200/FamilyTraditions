@@ -1,13 +1,39 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity } from 'react-native';
+import { auth } from '../firebase';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 const CreateAccountScreen = ({ navigation }) => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+        title: "Create a Chatty Account",
+        headerBackTitle: 'Login',
+      });
+  }, [navigation]);
 
   const handleCreateAccount = () => {
-    // Placeholder for account creation logic
-    console.log('Create Account pressed');
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+          const user = userCredential.user;
+          updateProfile(user, {
+              displayName: name,
+              photoURL: imageUrl || 'https://cencup.com/wp-content/uploads/2019/07/avatar-placeholder.png',
+          })
+          .then(() => {
+              navigation.replace('Home');
+              alert("User created successfully!")
+          }).catch((error) => {});
+          
+      }).catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          alert(errorCode, errorMessage);
+      });
   };
 
   return (

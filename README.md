@@ -5,20 +5,24 @@ Family Traditions is a React Native application designed to help families preser
 ## Features
 
 - **User Authentication**: Secure login and sign-up screens for user authentication.
+- **Password Reset**: Users can reset their passwords via email.
+- **Create Account**: New users can create an account to access the app.
 - **Home Screen**: A welcoming screen that serves as the landing page after login.
+- **Recipe Book Screen**: Displays a collection of digital recipe books.
 - **Book Screen**: Users can view their family recipe books.
 - **Recipe Screen**: Displays individual recipes for users to follow or share.
 - **Create Book Screen**: Allows users to create new digital recipe books.
+- **Family Members Screen**: Users can view and add family members to their books.
 - **Create Recipe Screen**: Users can add new recipes to their books.
-- **Loading Screen**: Enhances user experience during data processing or fetching.
 
 ## Technical Overview
 
 - **React Native**: The app is built using React Native, enabling cross-platform mobile app development.
 - **Navigation**: Utilizes React Navigation for navigating between screens.
-- **Styling**: Styled using Tailwind CSS for React Native.
 - **Expo**: Developed with Expo, which simplifies the development process.
-- **GPT**: Uses GPT-4 cooklang Agent for recipe instructions processing.
+- **Firebase**: Firebase is used for user authentication and database management.
+- **dotenv**: The dotenv package is used to load environment variables from a .env file.
+- **Nodemailer**: Nodemailer is used to send emails to users for password reset.
 
 ## Database Schema
 
