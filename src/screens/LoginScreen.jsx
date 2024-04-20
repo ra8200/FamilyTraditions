@@ -1,13 +1,37 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity } from 'react-native';
+import { auth } from '../../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
+      // console.log(authUser);
+      if(authUser) {
+        navigation.replace('Home'); 
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "Welcome to Chatty!",
+    });
+  }, [navigation]);
+
   const handleLogin = () => {
-    // Placeholder for authentication logic
-    console.log('Login pressed');
+    signInWithEmailAndPassword(auth, email, password)
+    .then((authUser) => {
+      navigation.replace('Home');
+    })
+    .catch((error) => {
+      alert(error.message);
+    });
   };
 
   return (
