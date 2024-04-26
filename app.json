@@ -2,7 +2,7 @@
   "expo": {
     "name": "Family Traditions",
     "slug": "FamilyTraditions",
-    "scheme": "FamilyTraditions",
+    // "scheme": "FamilyTraditions",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

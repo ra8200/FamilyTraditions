@@ -10,16 +10,17 @@ import { getFirestore } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCX5nqQQBYzroc4x3EAinuUEP0Ak8kiEOc",
-    authDomain: "chat-app-cdb60.firebaseapp.com",
-    databaseURL: "https://chat-app-cdb60-default-rtdb.firebaseio.com",
-    projectId: "familytraditions-35b28",
-    storageBucket: "chat-app-cdb60.appspot.com",
-    messagingSenderId: "231810229987",
-    appId: "1:231810229987:android:1e603110d32b8ce1ed47d6"
-  };
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_API_ID,
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID
+};
 
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 let auth;
 
 if (typeof document !== 'undefined') {

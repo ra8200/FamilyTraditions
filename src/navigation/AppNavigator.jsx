@@ -19,7 +19,7 @@ function AppNavigator() {
               case 'Home':
                 iconName = focused ? 'home' : 'home-outline';
                 break;
-              case 'RecipeBooksScreen': // Changed to 'RecipeBooksTab' to differentiate from the screen name in the stack
+              case 'RecipeBooksScreen':
                 iconName = focused ? 'book' : 'book-outline';
                 break;
               case 'UserAccount':
