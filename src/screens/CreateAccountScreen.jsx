@@ -1,7 +1,15 @@
 import React, { useLayoutEffect, useState } from 'react';
-import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity } from 'react-native';
+import { 
+  StyleSheet, 
+  Text, 
+  TextInput, 
+  View, 
+  Button, 
+  TouchableOpacity 
+} from 'react-native';
 import { auth } from '../firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import * as ImagePicker from 'expo-image-picker';
 
 const CreateAccountScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -11,10 +19,23 @@ const CreateAccountScreen = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-        title: "Create a Chatty Account",
+        title: "Create an Account",
         headerBackTitle: 'Login',
       });
   }, [navigation]);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImageUrl(result.uri);
+    }
+  };
 
   const handleCreateAccount = () => {
     createUserWithEmailAndPassword(auth, email, password)
@@ -55,7 +76,7 @@ const CreateAccountScreen = ({ navigation }) => {
       />
       <Button title="Create Account" onPress={handleCreateAccount} />
       <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Text style={styles.linkText}>Already have an account? Login</Text>
+        <Text style={styles.linkText}>Already have an account?</Text>
       </TouchableOpacity>
     </View>
   );
