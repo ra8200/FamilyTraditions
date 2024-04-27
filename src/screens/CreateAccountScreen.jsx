@@ -7,7 +7,7 @@ import {
   Button, 
   TouchableOpacity 
 } from 'react-native';
-import { auth } from '../firebase';
+import { auth } from '../firebase/firebaseConfig';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -60,6 +60,12 @@ const CreateAccountScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create Account</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={setName}
+        value={name}
+        placeholder="Full Name"
+      />
       <TextInput
         style={styles.input}
         onChangeText={setEmail}

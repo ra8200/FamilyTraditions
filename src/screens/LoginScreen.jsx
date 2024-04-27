@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useLayoutEffect  } from 'react';
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity } from 'react-native';
-import { auth } from '../../firebase';
+import { auth } from '../firebase/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const LoginScreen = ({ navigation }) => {
@@ -9,7 +9,7 @@ const LoginScreen = ({ navigation }) => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
-      // console.log(authUser);
+      console.log(authUser);
       if(authUser) {
         navigation.replace('Home'); 
       }
@@ -20,7 +20,7 @@ const LoginScreen = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Welcome to Chatty!",
+      title: "Family Traditions!",
     });
   }, [navigation]);
 
