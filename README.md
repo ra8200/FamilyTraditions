@@ -21,8 +21,6 @@ Family Traditions is a React Native application designed to help families preser
 - **Navigation**: Utilizes React Navigation for navigating between screens.
 - **Expo**: Developed with Expo, which simplifies the development process.
 - **Firebase**: Firebase is used for user authentication and database management.
-- **dotenv**: The dotenv package is used to load environment variables from a .env file.
-- **Nodemailer**: Nodemailer is used to send emails to users for password reset.
 
 ## Database Schema
 
