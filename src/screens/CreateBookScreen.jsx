@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, Alert, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { db, auth } from '../firebase/firebaseConfig'
+import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const CreateBookScreen = ({ navigation }) => {
   const [title, setTitle] = useState('');
