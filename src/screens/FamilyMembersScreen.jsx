@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Modal, TextInput, Button } from 'react-native';
+import { StyleSheet, View, Text, FlatList, Pressable, Modal, TextInput, Button } from 'react-native';
 
 const AddMemberModal = ({ isVisible, onClose, onAddMember }) => {
   const [memberEmail, setMemberEmail] = useState('');
@@ -67,9 +67,9 @@ const FamilyMembersScreen = () => {
         )}
         keyExtractor={item => item.id}
       />
-      <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
+      <Pressable style={styles.addButton} onPress={() => setModalVisible(true)}>
         <Text style={styles.addButtonText}>Add Member</Text>
-      </TouchableOpacity>
+      </Pressable>
       <AddMemberModal
         isVisible={modalVisible}
         onClose={() => setModalVisible(false)}

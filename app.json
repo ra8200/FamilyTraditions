@@ -30,6 +30,10 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "apiUrl": "https://myapi.com",
+      "apiKey": "secret-key"
+    }
   }
 }
