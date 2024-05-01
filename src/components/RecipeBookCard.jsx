@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, Image, View } from 'react-native';
+import { StyleSheet, Text, Pressable, Image } from 'react-native';
 
 const RecipeBookCard = ({ title, imageUrl, onPress }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.cardContainer}>
+    <Pressable onPress={onPress} style={styles.cardContainer}>
       <Image source={{ uri: imageUrl }} style={styles.image} />
       <Text style={styles.title}>{title}</Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

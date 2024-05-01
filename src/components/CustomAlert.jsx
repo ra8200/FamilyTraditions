@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Pressable } from 'react-native';
 
 const CustomAlert = ({ isVisible, message, onClose }) => {
   if (!isVisible) return null;
@@ -8,9 +8,9 @@ const CustomAlert = ({ isVisible, message, onClose }) => {
     <View style={styles.overlay}>
       <View style={styles.alertBox}>
         <Text style={styles.message}>{message}</Text>
-        <TouchableOpacity style={styles.button} onPress={onClose}>
+        <Pressable style={styles.button} onPress={onClose}>
           <Text style={styles.buttonText}>OK</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );

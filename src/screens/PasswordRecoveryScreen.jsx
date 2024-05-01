@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, Pressable } from 'react-native';
 
 const PasswordRecoveryScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -20,9 +20,9 @@ const PasswordRecoveryScreen = ({ navigation }) => {
         keyboardType="email-address"
       />
       <Button title="Send Recovery Email" onPress={handlePasswordRecovery} />
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <Pressable onPress={() => navigation.goBack()}>
         <Text style={styles.linkText}>Back to Login</Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };

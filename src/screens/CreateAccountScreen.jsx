@@ -1,7 +1,8 @@
 import React, { useLayoutEffect, useState } from 'react';
-import { StyleSheet,Text, TextInput, View, Button, Image, TouchableOpacity } from 'react-native';
-import { auth } from '../firebase/firebaseConfig';
+import { StyleSheet,Text, TextInput, View, Button, Image, Pressable } from 'react-native';
+import { auth, db } from '../firebase/firebaseConfig';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import * as ImagePicker from 'expo-image-picker';
 import CustomAlert from '../components/CustomAlert';
 
@@ -59,7 +60,8 @@ const CreateAccountScreen = ({ navigation }) => {
           setShowAlert(true);
         });
       }).catch((error) => {
-        setAlertMessage(error.message);
+        console.error("Error during account creation:", error);
+        setAlertMessage(`Error: ${error.message}`);
         setShowAlert(true);
       });
   };
@@ -89,10 +91,15 @@ const CreateAccountScreen = ({ navigation }) => {
   };
 
   const checkUsernameUnique = async (username) => {
-    const usersRef = collection(db, "users");
-    const q = query(usersRef, where("username", "==", username));
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.empty; // Returns true if no documents match, i.e., username is unique
+    try {
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, where("username", "==", username));
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.empty;
+    } catch (error) {
+      console.error("Error checking if username is unique:", error);
+      throw error;
+    }
   };
 
   return (
@@ -140,9 +147,9 @@ const CreateAccountScreen = ({ navigation }) => {
       <Button title="Pick an Image" onPress={pickImage} />
       {profileImage && <Image source={{ uri: profileImage }} style={styles.image} />}
       <Button title="Create Account" onPress={handleCreateAccount} />
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+      <Pressable onPress={() => navigation.navigate('Login')}>
         <Text style={styles.linkText}>Already have an account?</Text>
-      </TouchableOpacity>
+      </Pressable>
       <CustomAlert
         isVisible={showAlert}
         message={alertMessage}

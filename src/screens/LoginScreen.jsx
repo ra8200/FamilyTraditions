@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect  } from 'react';
-import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, Pressable } from 'react-native';
 import { auth } from '../firebase/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
@@ -52,12 +52,12 @@ const LoginScreen = ({ navigation }) => {
         secureTextEntry
       />
       <Button title="Login" onPress={handleLogin} />
-      <TouchableOpacity onPress={() => navigation.navigate('PasswordRecovery')}>
+      <Pressable onPress={() => navigation.navigate('PasswordRecovery')}>
         <Text style={styles.linkText}>Forgot Password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('CreateAccount')}>
+      </Pressable>
+      <Pressable onPress={() => navigation.navigate('CreateAccount')}>
         <Text style={styles.linkText}>Create Account</Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };
