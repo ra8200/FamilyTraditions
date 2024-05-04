@@ -1,0 +1,35 @@
+# Dependencies
+/node_modules/
+/package-lock.json
+
+# Expo & React Native
+expo.*.log
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# OS files
+.DS_Store
+*.swp
+*.swo
+*.tmp
+Thumbs.db
+
+# IDE/Editor directories
+.idea/
+.vscode/
+
+# Keystore files
+*.keystore
+*.keystore.pass
+
+# Generated files
+android/app/build/
+ios/build/
+ios/Pods/
+assets.json
