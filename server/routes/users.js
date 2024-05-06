@@ -1,4 +1,5 @@
-module.exports = function (app, pool) {
+// import cloudinary from './config/cloudinaryConfig';
+module.export = function (app, pool) {
     app.get('/users', (req, res) => {
         const query = 'SELECT * FROM users;';
         pool.query(query, (error, result) => {
@@ -12,9 +13,12 @@ module.exports = function (app, pool) {
     });
 
     app.post('/users', (req, res) => {
-        const { username, password } = req.body;
-        const query = 'INSERT INTO users (username, password) VALUES ($1, $2);';
-        pool.query(query, [username, password], (error, result) => {
+        const { username, password, email, firstName, lastName, profileImageUrl } = req.body;
+        const query = `
+            INSERT INTO users (username, password, email, first_name, last_name, profile_image_url) 
+            VALUES ($1, $2, $3, $4, $5, $6);
+        `;
+        pool.query(query, [username, password, email, firstName, lastName, profileImageUrl], (error, result) => {
             if (error) {
                 console.error('Error executing query', error.stack);
                 res.status(500).send('Error executing query');
