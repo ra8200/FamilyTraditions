@@ -1,3 +1,11 @@
-.aider*
+# Dependencies
+/node_modules/
+/package-lock.json
 
+# Environment configuration
 .env
+.env.test
+.env.production
+
+# Aider
+.aider*
