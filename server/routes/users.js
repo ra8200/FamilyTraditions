@@ -1,4 +1,4 @@
-const cloudinary = require('./config/cloudinaryConfig');
+// const cloudinary = require('./config/cloudinaryConfig');
 module.exports = function (app, pool) {
     app.get('/users', (req, res) => {
         const query = 'SELECT * FROM users;';

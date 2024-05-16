@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, Switch, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { db, auth } from '../firebase/firebaseConfig'
-import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
+import { useUser } from '@clerk/clerk-expo';
 
 const CreateRecipeScreen = ({ navigation }) => {
   const [title, setTitle] = useState('');
@@ -25,33 +24,36 @@ const CreateRecipeScreen = ({ navigation }) => {
   };
 
   const handleSubmit = async () => {
-    if (!firebase.auth().currentUser) {
+    if (!user) {
       Alert.alert('Error', 'You must be logged in to submit a recipe');
       return;
     }
   
+    const recipeData = {
+      title,
+      ingredients,
+      instructions,
+      isPublic,
+      creatorId: user.id  // Assuming Clerk provides a unique user ID
+    };
+  
     try {
-      const userRole = (await firebase.firestore().collection('users')
-        .doc(firebase.auth().currentUser.uid).get()).data().role;
+      const response = await fetch('http://localhost:3000/recipes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.sessionToken}`  // Include the session token for authentication
+        },
+        body: JSON.stringify(recipeData)
+      });
   
-      // Check if user is allowed to create recipes
-      if (userRole !== 'Member' && userRole !== 'Admin Member' && userRole !== 'Author') {
-        Alert.alert('Permission Denied', 'You do not have permission to create recipes');
-        return;
+      const responseData = await response.json();
+      if (response.ok) {
+        Alert.alert('Recipe Submitted', `Recipe Title: ${title}`);
+        navigation.goBack();
+      } else {
+        throw new Error(responseData.message || 'Failed to create recipe');
       }
-  
-      const newRecipe = {
-        title,
-        ingredients,
-        instructions,
-        isPublic,
-        creatorId: firebase.auth().currentUser.uid,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      };
-  
-      await firebase.firestore().collection('recipes').add(newRecipe);
-      Alert.alert('Recipe Submitted', `Recipe Title: ${title}`);
-      navigation.goBack(); // Optionally navigate back or reset form
     } catch (error) {
       console.error("Error submitting recipe: ", error);
       Alert.alert('Error', 'There was an error submitting your recipe');

@@ -1,3 +1,5 @@
+// import cloudinary from './config/cloudinaryConfig';
+
 module.exports = function(app, pool) {
     app.get('/recipes', (req, res) => {
         const query = 'SELECT * FROM recipes;';

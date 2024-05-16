@@ -33,3 +33,6 @@ android/app/build/
 ios/build/
 ios/Pods/
 assets.json
+
+# Variable files
+.env

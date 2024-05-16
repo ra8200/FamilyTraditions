@@ -2,8 +2,11 @@ import React, { useLayoutEffect, useState } from 'react';
 import { StyleSheet,Text, TextInput, View, Button, Image, Pressable } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import CustomAlert from '../components/CustomAlert';
+import { useSignUp, useUser } from '@clerk/clerk-expo';
 
 const CreateAccountScreen = ({ navigation }) => {
+  const { signUp } = useSignUp();
+  const { isSignedIn } = useUser();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -35,44 +38,63 @@ const CreateAccountScreen = ({ navigation }) => {
   };
 
   const handleCreateAccount = async () => {
-    
+    if (!validateInput()) {
+      return; // Stops the function if the validation fails
+    }
+  
+    try {
+      const response = await fetch('http://localhost:3000/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+          email: email,
+          firstName: firstName,
+          lastName: lastName,
+          profileImageUrl: profileImage
+        })
+      });
+  
+      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message || 'Failed to create user');
+      }
+  
+      navigation.navigate('Home'); // Or handle successful sign up differently
+    } catch (error) {
+      setAlertMessage("An unexpected error occurred: " + error.message);
+      setShowAlert(true);
+    }
   };
 
-  // const validateInput = () => {
-  //   if (username.trim() === "") {
-  //     setAlertMessage("Username is required.");
-  //     setShowAlert(true);
-  //     return false;
-  //   }
-  //   if (email.trim() === "") {
-  //     setAlertMessage("Email is required.");
-  //     setShowAlert(true);
-  //     return false;
-  //   }
-  //   if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/)) {
-  //     setAlertMessage("Password must include upper, lower, number, and special char.");
-  //     setShowAlert(true);
-  //     return false;
-  //   }
-  //   if (password !== confirmPassword) {
-  //     setAlertMessage("Passwords do not match.");
-  //     setShowAlert(true);
-  //     return false;
-  //   }
-  //   return true;
-  // };
-
-  // const checkUsernameUnique = async (username) => {
-  //   try {
-  //     const usersRef = collection(db, "users");
-  //     const q = query(usersRef, where("username", "==", username));
-  //     const querySnapshot = await getDocs(q);
-  //     return querySnapshot.empty;
-  //   } catch (error) {
-  //     console.error("Error checking if username is unique:", error);
-  //     throw error;
-  //   }
-  // };
+  const validateInput = () => {
+    // Add all validation checks here
+  if (username.trim() === "") {
+    setAlertMessage("Username is required.");
+    setShowAlert(true);
+    return false;
+  }
+  if (email.trim() === "" || !email.includes('@')) { // Basic email format check
+    setAlertMessage("Valid email is required.");
+    setShowAlert(true);
+    return false;
+  }
+  // Password strength check
+  if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/)) {
+    setAlertMessage("Password must include at least 8 characters with upper, lower, number, and special char.");
+    setShowAlert(true);
+    return false;
+  }
+  if (password !== confirmPassword) {
+    setAlertMessage("Passwords do not match.");
+    setShowAlert(true);
+    return false;
+  }
+  return true;
+  };
 
   return (
     <View style={styles.container}>
@@ -148,6 +170,11 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     padding: 10,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    marginVertical: 10,
   },
   linkText: {
     color: 'blue',
