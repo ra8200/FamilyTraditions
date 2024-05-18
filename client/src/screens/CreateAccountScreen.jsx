@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { StyleSheet,Text, TextInput, View, Button, Image, Pressable } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import CustomAlert from '../components/CustomAlert';
+import CustomAlert from '../components/ui/CustomAlert';
 import { useSignUp, useUser } from '@clerk/clerk-expo';
 
 const CreateAccountScreen = ({ navigation }) => {
