@@ -1,4 +1,4 @@
-// import cloudinary from './config/cloudinaryConfig';
+const { uploadImage } = require('../services/imageServices');
 
 module.exports = function(app, pool) {
     app.get('/recipes', (req, res) => {
@@ -13,17 +13,22 @@ module.exports = function(app, pool) {
         });
     });
 
-    app.post('/recipes', (req, res) => {
-        const { title, ingredients, instructions, recipe_book_id } = req.body;
-        const query = 'INSERT INTO recipes (title, ingredients, instructions, recipe_book_id) VALUES ($1, $2, $3, $4);';
-        pool.query(query, [title, ingredients, instructions, recipe_book_id], (error, result) => {
+    app.post('/recipes', async (req, res) => {
+        const { title, ingredients, instructions, recipe_book_id, image } = req.body;
+        try {
+            const imageUrl = await uploadImage(image);
+            const query = 'INSERT INTO recipes (title, ingredients, instructions, recipe_book_id, image_url) VALUES ($1, $2, $3, $4, $5);';
+            pool.query(query, [title, ingredients, instructions, recipe_book_id, imageUrl], (error, result) => {
             if (error) {
                 console.error('Error executing query', error.stack);
                 res.status(500).send('Error executing query');
             } else {
                 res.status(201).send('Recipe created');
             }
-        });
+            });
+        } catch (error) {
+            res.status(500).send('Error uploading image');
+        }
     });
 
     app.put('/recipes/:id', (req, res) => {
