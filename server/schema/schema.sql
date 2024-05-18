@@ -107,3 +107,22 @@ INSERT INTO permissions_matrix (role_id, permission_name) VALUES
 -- Insert Users
 INSERT INTO users (clerk_user_id, username, first_name, last_name, email, profile_image_url) VALUES
 ('clerk001', 'johndoe', 'John', 'Doe', 'johndoe@example.com',
+CREATE TABLE IF NOT EXISTS roles (
+    role_id serial PRIMARY KEY,
+    role_name VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS permissions_matrix (
+    matrix_id serial PRIMARY KEY,
+    role_id INT NOT NULL,
+    permission_name VARCHAR(50) NOT NULL,
+    FOREIGN KEY (role_id) REFERENCES roles(role_id)
+);
+
+CREATE TABLE IF NOT EXISTS user_account_permissions (
+    account_permission_id serial PRIMARY KEY,
+    user_id INT NOT NULL,
+    permission_name VARCHAR(100) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
