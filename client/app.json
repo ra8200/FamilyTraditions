@@ -3,6 +3,9 @@
     "name": "Family Traditions",
     "slug": "FamilyTraditions",
     "version": "1.0.0",
+    "extra": {
+      "clerkPublishableKey": "process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY"
+    },
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
