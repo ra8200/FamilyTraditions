@@ -11,3 +11,5 @@ const uploadImage = async (filePath) => {
 };
 
 module.exports = { uploadImage };
+
+const cloudinary = require('../config/cloudinaryConfig');

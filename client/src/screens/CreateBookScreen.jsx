@@ -1,60 +1,66 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Button, Alert, Image } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import { db, auth } from '../firebase/firebaseConfig'
-import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
+import { StyleSheet, View, Text, TextInput, Button, Alert } from 'react-native';
+import Layout from '../layouts/_layout';
+import ImageUploader from '../components/containers/ImageUploader';
 
 const CreateBookScreen = ({ navigation }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState(null);
+  const [bannerImage, setBannerImage] = useState('');
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/recipebooks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          image: bannerImage
+        })
+      });
 
-    if (!result.canceled) {
-      setImage(result.uri);
+      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message || 'Failed to create recipe book');
+      }
+
+      Alert.alert('Recipe Book Created', `Book Title: ${title}`);
+      navigation.goBack();
+    } catch (error) {
+      console.error("Error creating recipe book: ", error);
+      Alert.alert('Error', 'There was an error creating the recipe book');
     }
   };
 
-  const handleSubmit = () => {
-    // Placeholder for submission logic
-    Alert.alert('Recipe Book Created', `Book Title: ${title}`);
-  };
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Book Title</Text>
-      <TextInput
-        style={styles.input}
-        value={title}
-        onChangeText={setTitle}
-      />
-      
-      <Text style={styles.label}>Description</Text>
-      <TextInput
-        style={styles.input}
-        value={description}
-        multiline
-        numberOfLines={4}
-        onChangeText={setDescription}
-      />
-      
-      <Button title="Pick a Cover Image" onPress={pickImage} />
-      {image && (
-        <Image source={{ uri: image }} style={styles.previewImage} />
-      )}
+    <Layout>
+      <View style={styles.container}>
+        <Text style={styles.label}>Title</Text>
+        <TextInput
+          style={styles.input}
+          value={title}
+          onChangeText={setTitle}
+        />
 
-      <Button
-        title="Create Recipe Book"
-        onPress={handleSubmit}
-      />
-    </View>
+        <Text style={styles.label}>Description</Text>
+        <TextInput
+          style={styles.input}
+          value={description}
+          onChangeText={setDescription}
+          multiline
+        />
+
+        <ImageUploader onImageSelected={setBannerImage} />
+
+        <Button
+          title="Create Recipe Book"
+          onPress={handleSubmit}
+        />
+      </View>
+    </Layout>
   );
 };
 
@@ -74,10 +80,10 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 15,
   },
-  previewImage: {
-    width: '100%',
-    height: 200,
-    marginTop: 15,
+  image: {
+    width: 100,
+    height: 100,
+    marginVertical: 10,
   },
 });
 

@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextInput, View, Button, Pressable } from 'react-nati
 import CustomAlert from '../components/ui/CustomAlert';
 import { useSignUp, useUser } from '@clerk/clerk-expo';
 import Layout from '../layouts/_layout';
-import ImagePickerUploader from '../components/containers/ImagePickerUploader';
+import ImageUploader from '../components/containers/ImageUploader';
 
 const CreateAccountScreen = ({ navigation }) => {
   const { signUp } = useSignUp();
@@ -69,7 +69,7 @@ const CreateAccountScreen = ({ navigation }) => {
       setShowAlert(true);
       return false;
     }
-    if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/)) {
+    if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$/)) {
       setAlertMessage("Password must include at least 8 characters with upper, lower, number, and special char.");
       setShowAlert(true);
       return false;
@@ -125,7 +125,7 @@ const CreateAccountScreen = ({ navigation }) => {
           placeholder="Confirm Password"
           secureTextEntry
         />
-        <ImagePickerUploader onImageSelected={setProfileImage} />
+        <ImageUploader onImageSelected={setProfileImage} />
         <Button title="Create Account" onPress={handleCreateAccount} />
         <Pressable onPress={() => navigation.navigate('Login')}>
           <Text style={styles.linkText}>Already have an account?</Text>
