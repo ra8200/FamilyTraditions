@@ -8,7 +8,6 @@ import HomeScreen from '../screens/HomeScreen';
 import UserAccountScreen from '../screens/UserAccountScreen';
 import LoginScreen from '../screens/LoginScreen';
 import CreateAccountScreen from '../screens/CreateAccountScreen';
-import { db, auth } from '../firebase/firebaseConfig';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
