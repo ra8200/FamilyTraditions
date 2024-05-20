@@ -5,6 +5,7 @@ import { enableScreens } from 'react-native-screens';
 import AppNavigator from './navigation/AppNavigator';
 import { ClerkProvider } from "@clerk/clerk-expo";
 import Constants from 'expo-constants';
+import 'react-native-url-polyfill/auto';
 
 enableScreens();
 
