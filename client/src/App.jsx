@@ -2,7 +2,7 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { enableScreens } from 'react-native-screens';
-import AppNavigator from './src/navigation/AppNavigator';
+import AppNavigator from './navigation/AppNavigator';
 import { ClerkProvider } from "@clerk/clerk-expo";
 import Constants from 'expo-constants';
 
@@ -16,6 +16,5 @@ export default function App() {
         <StatusBar style="auto" />
       </SafeAreaProvider>
     </ClerkProvider>
-
   );
 }
