@@ -10,6 +10,8 @@ import 'react-native-url-polyfill/auto';
 enableScreens();
 
 const App = () => {
+  console.log('Clerk Publishable Key:', Constants.expoConfig.extra.clerkPublishableKey);  // Log the key to the console
+
   return (
     <ClerkProvider publishableKey={Constants.expoConfig.extra.clerkPublishableKey}>
       <ScrollView>
