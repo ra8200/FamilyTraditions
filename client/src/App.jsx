@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 import AppNavigator from './navigation/AppNavigator';
 import { ClerkProvider } from "@clerk/clerk-expo";
@@ -9,13 +9,15 @@ import 'react-native-url-polyfill/auto';
 
 enableScreens();
 
-export default function App() {
+const App = () => {
   return (
     <ClerkProvider publishableKey={Constants.expoConfig.extra.clerkPublishableKey}>
-      <SafeAreaProvider>
+      <ScrollView>
         <AppNavigator />
         <StatusBar style="auto" />
-      </SafeAreaProvider>
+      </ScrollView>
     </ClerkProvider>
   );
 }
+
+export default App;
