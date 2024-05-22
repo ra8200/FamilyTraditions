@@ -1,11 +1,11 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import RecipeBooksScreen from '../screens/RecipeBooksScreen';
-import BookScreen from '../screens/BookScreen';
-import CreateBookScreen from '../screens/CreateBookScreen';
-import RecipeScreen from '../screens/RecipeScreen';
-import FamilyMembersScreen from '../screens/FamilyMembersScreen';
-import CreateRecipeScreen from '../screens/CreateRecipeScreen';
+import RecipeBooksScreen from '../screens/auth/RecipeBooksScreen';
+import BookScreen from '../screens/auth/BookScreen';
+import CreateBookScreen from '../screens/auth/CreateBookScreen';
+import RecipeScreen from '../screens/auth/RecipeScreen';
+import FamilyMembersScreen from '../screens/auth/FamilyMembersScreen';
+import CreateRecipeScreen from '../screens/auth/CreateRecipeScreen';
 
 const Stack = createStackNavigator();
 
