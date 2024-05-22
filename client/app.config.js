@@ -30,6 +30,7 @@ export default ({ config }) => {
       favicon: "./assets/favicon.png"
     },
     plugins: [
+      "expo-secure-store",
       ["expo-router", { "root": "./src" }]
     ],
     extra: {

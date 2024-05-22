@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, FlatList, Button, StyleSheet } from 'react-native';
-import RecipeCard from '../components/containers/RecipeCard';
+import RecipeCard from '../../components/containers/RecipeCard';
 
 const mockRecipes = [
   { id: '1', title: 'Grandma’s Apple Pie', category: 'Dessert' },

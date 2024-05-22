@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, Alert } from 'react-native';
-import Layout from '../layouts/_layout';
-import ImageUploader from '../components/containers/ImageUploader';
+import Layout from '../../layouts/_layout';
+import ImageUploader from '../../components/containers/ImageUploader';
 
 const CreateBookScreen = ({ navigation }) => {
   const [title, setTitle] = useState('');

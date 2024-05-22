@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, FlatList, Button } from 'react-native';
-import RecipeBookCard from '../components/containers/RecipeBookCard'; // Adjust the import path as needed
+import RecipeBookCard from '../../components/containers/RecipeBookCard'; // Adjust the import path as needed
 
 const RecipeBooksScreen = ({ navigation }) => {
   // Placeholder data - you'll replace this with data from your database

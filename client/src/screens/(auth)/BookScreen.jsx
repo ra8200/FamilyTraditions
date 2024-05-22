@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList, Button, Image } from 'react-native';
-import RecipeCard from '../components/containers/RecipeCard';
+import RecipeCard from '../../components/containers/RecipeCard';
 
 // Placeholder data for recipes within the book
 const BookScreen = ({ route, navigation }) => {

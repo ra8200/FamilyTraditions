@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useLayoutEffect  } from 'react';
 import { StyleSheet, Text, TextInput, View, Button, Pressable } from 'react-native';
+import { useAuth } from '@clerk/clerk-expo';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { isSignedIn, user } = useAuth();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
@@ -22,8 +24,13 @@ const LoginScreen = ({ navigation }) => {
     });
   }, [navigation]);
 
-  const handleLogin = () => {
-    
+  const handleLogin = async () => {
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      navigation.replace('Home');
+    } catch (error) {
+      console.error("Login error: ", error);
+    }
   };
 
   return (

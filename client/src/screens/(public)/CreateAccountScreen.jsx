@@ -1,9 +1,9 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Button, Pressable } from 'react-native';
-import CustomAlert from '../components/ui/CustomAlert';
+import CustomAlert from '../../components/ui/CustomAlert';
 import { useSignUp, useUser } from '@clerk/clerk-expo';
-import Layout from '../layouts/_layout';
-import ImageUploader from '../components/containers/ImageUploader';
+import Layout from '../../layouts/_layout';
+import ImageUploader from '../../components/containers/ImageUploader';
 
 const CreateAccountScreen = ({ navigation }) => {
   const { signUp } = useSignUp();
