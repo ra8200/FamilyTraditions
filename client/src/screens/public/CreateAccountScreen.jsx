@@ -2,7 +2,6 @@ import React, { useLayoutEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Button, Pressable } from 'react-native';
 import CustomAlert from '../../components/ui/CustomAlert';
 import { useSignUp, useUser } from '@clerk/clerk-expo';
-import Layout from '../../layouts/_layout';
 import ImageUploader from '../../components/containers/ImageUploader';
 
 const CreateAccountScreen = ({ navigation }) => {
@@ -83,60 +82,58 @@ const CreateAccountScreen = ({ navigation }) => {
   };
 
   return (
-    <Layout>
-      <View style={styles.container}>
-        <Text style={styles.title}>Create Account</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={setUsername}
-          value={username}
-          placeholder="Username"
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={setFirstName}
-          value={firstName}
-          placeholder="First Name"
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={setLastName}
-          value={lastName}
-          placeholder="Last Name"
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={setEmail}
-          value={email}
-          placeholder="Email"
-          keyboardType="email-address"
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={setPassword}
-          value={password}
-          placeholder="Password"
-          secureTextEntry
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={setConfirmPassword}
-          value={confirmPassword}
-          placeholder="Confirm Password"
-          secureTextEntry
-        />
-        <ImageUploader onImageSelected={setProfileImage} />
-        <Button title="Create Account" onPress={handleCreateAccount} />
-        <Pressable onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.linkText}>Already have an account?</Text>
-        </Pressable>
-        <CustomAlert
-          isVisible={showAlert}
-          message={alertMessage}
-          onClose={() => setShowAlert(false)}
-        />
-      </View>
-    </Layout>
+    <View style={styles.container}>
+      <Text style={styles.title}>Create Account</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={setUsername}
+        value={username}
+        placeholder="Username"
+      />
+      <TextInput
+        style={styles.input}
+        onChangeText={setFirstName}
+        value={firstName}
+        placeholder="First Name"
+      />
+      <TextInput
+        style={styles.input}
+        onChangeText={setLastName}
+        value={lastName}
+        placeholder="Last Name"
+      />
+      <TextInput
+        style={styles.input}
+        onChangeText={setEmail}
+        value={email}
+        placeholder="Email"
+        keyboardType="email-address"
+      />
+      <TextInput
+        style={styles.input}
+        onChangeText={setPassword}
+        value={password}
+        placeholder="Password"
+        secureTextEntry
+      />
+      <TextInput
+        style={styles.input}
+        onChangeText={setConfirmPassword}
+        value={confirmPassword}
+        placeholder="Confirm Password"
+        secureTextEntry
+      />
+      <ImageUploader onImageSelected={setProfileImage} />
+      <Button title="Create Account" onPress={handleCreateAccount} />
+      <Pressable onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.linkText}>Already have an account?</Text>
+      </Pressable>
+      <CustomAlert
+        isVisible={showAlert}
+        message={alertMessage}
+        onClose={() => setShowAlert(false)}
+      />
+    </View>
   );
 };
 

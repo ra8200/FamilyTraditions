@@ -84,7 +84,7 @@
 // export default HomeScreen;
 
 import React, { useState } from 'react';
-import { Text, TextInput, FlatList, StyleSheet } from 'react-native';
+import { Text, TextInput, StyleSheet, ScrollView, Pressable } from 'react-native';
 import RecipeCard from '../../components/containers/RecipeCard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -102,7 +102,7 @@ function HomeScreen({ navigation }) {
     setSearchQuery(text);
     if (text === '') {
       setFilteredRecipes(mockRecipes);
-    } else {
+    } else { 
       const filtered = mockRecipes.filter((recipe) =>
         recipe.title.toLowerCase().includes(text.toLowerCase())
       );
@@ -112,24 +112,26 @@ function HomeScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>Featured Recipes</Text>
-      <TextInput
-        style={styles.searchInput}
-        placeholder="Search recipes..."
-        value={searchQuery}
-        onChangeText={handleSearch}
-      />
-      <FlatList
-        data={filteredRecipes}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <RecipeCard
-            title={item.title}
-            imageUri={item.imageUri}
-            onPress={() => navigation.navigate('RecipeDetails', { recipeId: item.id })}
-          />
-        )}
-      />
+      <ScrollView>
+        <Text style={styles.header}>Featured Recipes</Text>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search recipes..."
+          value={searchQuery}
+          onChangeText={handleSearch}
+        />
+        <Pressable
+          data={filteredRecipes}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <RecipeCard
+              title={item.title}
+              imageUri={item.imageUri}
+              onPress={() => navigation.navigate('RecipeDetails', { recipeId: item.id })}
+            />
+          )}
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 }

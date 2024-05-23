@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, Alert } from 'react-native';
-import Layout from '../../layouts/_layout';
 import ImageUploader from '../../components/containers/ImageUploader';
 
 const CreateRecipeScreen = ({ navigation }) => {
@@ -40,46 +39,44 @@ const CreateRecipeScreen = ({ navigation }) => {
   };
 
   return (
-    <Layout>
-      <View style={styles.container}>
-        <Text style={styles.label}>Title</Text>
-        <TextInput
-          style={styles.input}
-          value={title}
-          onChangeText={setTitle}
-        />
+    <View style={styles.container}>
+      <Text style={styles.label}>Title</Text>
+      <TextInput
+        style={styles.input}
+        value={title}
+        onChangeText={setTitle}
+      />
 
-        <Text style={styles.label}>Ingredients</Text>
-        <TextInput
-          style={styles.input}
-          value={ingredients}
-          onChangeText={setIngredients}
-          multiline
-        />
+      <Text style={styles.label}>Ingredients</Text>
+      <TextInput
+        style={styles.input}
+        value={ingredients}
+        onChangeText={setIngredients}
+        multiline
+      />
 
-        <Text style={styles.label}>Instructions</Text>
-        <TextInput
-          style={styles.input}
-          value={instructions}
-          onChangeText={setInstructions}
-          multiline
-        />
+      <Text style={styles.label}>Instructions</Text>
+      <TextInput
+        style={styles.input}
+        value={instructions}
+        onChangeText={setInstructions}
+        multiline
+      />
 
-        <Text style={styles.label}>Recipe Book ID</Text>
-        <TextInput
-          style={styles.input}
-          value={recipeBookId}
-          onChangeText={setRecipeBookId}
-        />
+      <Text style={styles.label}>Recipe Book ID</Text>
+      <TextInput
+        style={styles.input}
+        value={recipeBookId}
+        onChangeText={setRecipeBookId}
+      />
 
-        <ImageUploader onImageSelected={setImage} />
+      <ImageUploader onImageSelected={setImage} />
 
-        <Button
-          title="Create Recipe"
-          onPress={handleSubmit}
-        />
-      </View>
-    </Layout>
+      <Button
+        title="Create Recipe"
+        onPress={handleSubmit}
+      />
+    </View>
   );
 };
 

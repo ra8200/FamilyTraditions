@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Button, Alert } from 'react-native';
-import Layout from '../../layouts/_layout';
 import ImageUploader from '../../components/containers/ImageUploader';
 
 const CreateBookScreen = ({ navigation }) => {
@@ -36,31 +35,29 @@ const CreateBookScreen = ({ navigation }) => {
   };
 
   return (
-    <Layout>
-      <View style={styles.container}>
-        <Text style={styles.label}>Title</Text>
-        <TextInput
-          style={styles.input}
-          value={title}
-          onChangeText={setTitle}
-        />
+    <View style={styles.container}>
+      <Text style={styles.label}>Title</Text>
+      <TextInput
+        style={styles.input}
+        value={title}
+        onChangeText={setTitle}
+      />
 
-        <Text style={styles.label}>Description</Text>
-        <TextInput
-          style={styles.input}
-          value={description}
-          onChangeText={setDescription}
-          multiline
-        />
+      <Text style={styles.label}>Description</Text>
+      <TextInput
+        style={styles.input}
+        value={description}
+        onChangeText={setDescription}
+        multiline
+      />
 
-        <ImageUploader onImageSelected={setBannerImage} />
+      <ImageUploader onImageSelected={setBannerImage} />
 
-        <Button
-          title="Create Recipe Book"
-          onPress={handleSubmit}
-        />
-      </View>
-    </Layout>
+      <Button
+        title="Create Recipe Book"
+        onPress={handleSubmit}
+      />
+    </View>
   );
 };
 
