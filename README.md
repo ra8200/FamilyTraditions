@@ -17,9 +17,7 @@ Family Traditions is a React Native application designed to help families preser
 
 ## Technical Overview
 
-- **React Native**: The app is built using React Native, enabling cross-platform mobile app development.
-- **Navigation**: Utilizes React Navigation for navigating between screens.
-- **Expo**: Developed with Expo, which simplifies the development process.
+- **Expo - React Native**: The app is built using Expo, a framework for building cross-platform applications.
 - **Postgres/Neon**: The database is built using Postgres and Neon, a PostgreSQL client for Node.js.
 - **Clerk**: User authentication is handled by Clerk, a secure authentication service.
 - **Cloudinary**: Images are stored using Cloudinary, a cloud-based image management service.

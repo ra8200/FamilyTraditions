@@ -4,9 +4,3 @@
 
 # Environment configuration
 .env
-.env.test
-.env.production
-
-# Aider
-.aider*
-.idea*
