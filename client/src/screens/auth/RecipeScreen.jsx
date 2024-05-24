@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, Image, ScrollView } from 'react-native';
+import { fetchRecipe } from '../../api/api';
 
 const RecipeScreen = ({ route, navigation }) => {
-  // Placeholder data
   const { recipeId } = route.params;
   const [recipe, setRecipe] = useState(null);
 
   useEffect(() => {
-    const fetchRecipe = async () => {
+    const loadRecipe = async () => {
       try {
-        const response = await fetch(`https://yourapi.com/api/recipes/${recipeId}`);
-        const json = await response.json();
-        setRecipe(json);
+        const fetchedRecipe = await fetchRecipe(recipeId);
+        setRecipe(fetchedRecipe);
       } catch (error) {
-        console.error('Failed to fetch recipe:', error);
+        console.error('Failed to load recipe:', error);
       }
     };
 
-    fetchRecipe();
+    loadRecipe();
   }, [recipeId]);
 
   if (!recipe) {
-    return <Text>Loading...</Text>; // Handle loading state
+    return <Text>Loading...</Text>;
   }
 
   return (

@@ -1,17 +1,18 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { ScrollView } from 'react-native';
+import { View } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 import AppNavigator from './navigation/AppNavigator';
+import 'react-native-url-polyfill/auto';
 
 enableScreens();
 
 const App = () => {
   return (
-    <ScrollView>
+    <View style={{ flex: 1 }}>
       <AppNavigator />
       <StatusBar style="auto" />
-    </ScrollView>
+    </View>
   );
 };
 

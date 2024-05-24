@@ -1,7 +1,9 @@
 import React from 'react';
 import { Text, Image, StyleSheet, Pressable } from 'react-native';
 
+
 const RecipeCard = ({ title, imageUri, onPress }) => {
+  
   return (
     <Pressable style={styles.card} onPress={onPress}>
       <Image source={{ uri: imageUri }} style={styles.image} />

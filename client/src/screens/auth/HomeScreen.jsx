@@ -1,17 +1,33 @@
 import React, { useState } from 'react';
-import { Text, TextInput, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { Text, TextInput, StyleSheet, ScrollView } from 'react-native';
 import RecipeCard from '../../components/containers/RecipeCard';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { fetchRecipes } from '../../api/api';
 
-const mockRecipes = [
-  { id: '1', title: 'Grandma’s Apple Pie', category: 'Dessert' },
-  { id: '2', title: 'Uncle Joe’s Chili', category: 'Main Dish' },
-  { id: '3', title: 'Aunt May’s Veggie Salad', category: 'Salad' },
-];
+// const mockRecipes = [
+//   { id: '1', title: 'Grandma’s Apple Pie', category: 'Dessert' },
+//   { id: '2', title: 'Uncle Joe’s Chili', category: 'Main Dish' },
+//   { id: '3', title: 'Aunt May’s Veggie Salad', category: 'Salad' },
+// ];
 
 function HomeScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [recipes, setRecipes] = useState([]);
   const [filteredRecipes, setFilteredRecipes] = useState(mockRecipes);
+
+  useEffect(() => {
+    const loadRecipes = async () => {
+      try {
+        const fetchedRecipes = await fetchRecipes();
+        setRecipes(fetchedRecipes);
+        setFilteredRecipes(fetchedRecipes);
+      } catch (error) {
+        console.error('Failed to load recipes:', error);
+      }
+    };
+
+    loadRecipes();
+  }, []);
 
   const handleSearch = (text) => {
     setSearchQuery(text);
@@ -36,9 +52,12 @@ function HomeScreen({ navigation }) {
           onChangeText={handleSearch}
         />
         {filteredRecipes.map((item) => (
-          <Pressable key={item.id} onPress={() => navigation.navigate('RecipeDetails', { recipeId: item.id })}>
-            <RecipeCard title={item.title} imageUri={item.imageUri} />
-          </Pressable>
+          <RecipeCard
+            key={item.recipe_id}
+            title={item.title}
+            imageUri={item.image_url}
+            onPress={() => navigation.navigate('RecipeDetails', { recipeId: item.recipe_id })}
+          />
         ))}
       </ScrollView>
     </SafeAreaView>
