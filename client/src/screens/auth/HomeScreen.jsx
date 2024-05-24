@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, TextInput, StyleSheet, ScrollView } from 'react-native';
 import RecipeCard from '../../components/containers/RecipeCard';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,7 +13,7 @@ import { fetchRecipes } from '../../api/api';
 function HomeScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [recipes, setRecipes] = useState([]);
-  const [filteredRecipes, setFilteredRecipes] = useState(mockRecipes);
+  const [filteredRecipes, setFilteredRecipes] = useState([]);
 
   useEffect(() => {
     const loadRecipes = async () => {
