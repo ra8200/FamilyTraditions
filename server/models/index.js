@@ -10,9 +10,9 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
   }
 });
 
-const User = require('./User');
-const Recipe = require('./Recipe');
-const RecipeBook = require('./RecipeBook');
+const User = require('./User')(sequelize, Sequelize.DataTypes);
+const Recipe = require('./Recipes')(sequelize, Sequelize.DataTypes);
+const RecipeBook = require('./RecipeBook')(sequelize, Sequelize.DataTypes);
 
 User.hasMany(RecipeBook, { foreignKey: 'author_id' });
 RecipeBook.belongsTo(User, { foreignKey: 'author_id' });

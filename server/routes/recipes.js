@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Recipe, RecipeBook, User } = require('../models');
+const cloudinary = require('cloudinary').v2;
 
 router.get('/', async (req, res) => {
   try {
@@ -17,8 +18,9 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { name, description, ingredients, instructions, recipe_book_id, creator_id, image_url } = req.body;
+  const { name, description, ingredients, instructions, recipe_book_id, creator_id, image } = req.body;
   try {
+    const uploadResponse = await cloudinary.uploader.upload(image);
     const newRecipe = await Recipe.create({
       name,
       description,
@@ -26,7 +28,7 @@ router.post('/', async (req, res) => {
       instructions,
       recipe_book_id,
       creator_id,
-      image_url,
+      image_url: uploadResponse.url,
     });
     res.status(201).json(newRecipe);
   } catch (error) {
@@ -36,10 +38,15 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
-  const { name, description, ingredients, instructions, recipe_book_id, image_url } = req.body;
+  const { name, description, ingredients, instructions, recipe_book_id, image } = req.body;
   try {
+    let imageUrl;
+    if (image) {
+      const uploadResponse = await cloudinary.uploader.upload(image);
+      imageUrl = uploadResponse.url;
+    }
     const updatedRecipe = await Recipe.update(
-      { name, description, ingredients, instructions, recipe_book_id, image_url },
+      { name, description, ingredients, instructions, recipe_book_id, image_url: imageUrl },
       { where: { recipe_id: id } }
     );
     res.json(updatedRecipe);

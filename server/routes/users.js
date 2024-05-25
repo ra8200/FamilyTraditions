@@ -1,71 +1,62 @@
-const { uploadImage } = require('../services/imageServices');
+const express = require('express');
+const router = express.Router();
+const { User } = require('../models');
+const cloudinary = require('cloudinary').v2;
 
-module.exports = function (app, pool) {
-    app.get('/users', (req, res) => {
-        const query = 'SELECT * FROM users;';
-        pool.query(query, (error, result) => {
-            if (error) {
-                console.error('Error executing query', error.stack);
-                res.status(500).send('Error executing query');
-            } else {
-                res.status(200).json(result.rows);
-            }
-        });
-    });
+router.get('/', async (req, res) => {
+  try {
+    const users = await User.findAll();
+    res.json(users);
+  } catch (error) {
+    res.status(500).send('Error fetching users');
+  }
+});
 
-    app.post('/users', async (req, res) => {
-        const { username, password, email, firstName, lastName, profileImage } = req.body;
-        try {
-            const imageUrl = await uploadImage(profileImage);
-            const query = `
-                INSERT INTO users (username, password, email, first_name, last_name, profile_image_url) 
-                VALUES ($1, $2, $3, $4, $5, $6);
-            `;
-            pool.query(query, [username, password, email, firstName, lastName, imageUrl], (error, result) => {
-                if (error) {
-                    console.error('Error executing query', error.stack);
-                    res.status(500).send('Error executing query');
-                } else {
-                    res.status(201).send('User created');
-                }
-            });
-        } catch (error) {
-            res.status(500).send('Error uploading image');
-        }
+router.post('/', async (req, res) => {
+  const { clerk_user_id, username, first_name, last_name, email, profileImage } = req.body;
+  try {
+    const uploadResponse = await cloudinary.uploader.upload(profileImage);
+    const newUser = await User.create({
+      clerk_user_id,
+      username,
+      first_name,
+      last_name,
+      email,
+      profile_image_url: uploadResponse.url,
     });
+    res.status(201).json(newUser);
+  } catch (error) {
+    res.status(500).send('Error creating user');
+  }
+});
 
-    app.put('/users/:id', async (req, res) => {
-        const { id } = req.params;
-        const { username, password, profileImage } = req.body;
-        try {
-            let imageUrl;
-            if (profileImage) {
-                imageUrl = await uploadImage(profileImage);
-            }
-            const query = 'UPDATE users SET username = $1, password = $2, profile_image_url = $3 WHERE user_id = $4;';
-            pool.query(query, [username, password, imageUrl, id], (error, result) => {
-                if (error) {
-                    console.error('Error executing query', error.stack);
-                    res.status(500).send('Error executing query');
-                } else {
-                    res.status(200).send('User updated');
-                }
-            });
-        } catch (error) {
-            res.status(500).send('Error uploading image');
-        }
-    });
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { username, first_name, last_name, email, profileImage } = req.body;
+  try {
+    let imageUrl;
+    if (profileImage) {
+      const uploadResponse = await cloudinary.uploader.upload(profileImage);
+      imageUrl = uploadResponse.url;
+    }
+    const updatedUser = await User.update(
+      { username, first_name, last_name, email, profile_image_url: imageUrl },
+      { where: { user_id: id } }
+    );
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).send('Error updating user');
+  }
+});
 
-    app.delete('/users/:id', (req, res) => {
-        const { id } = req.params;
-        const query = 'DELETE FROM users WHERE user_id = $1;';
-        pool.query(query, [id], (error, result) => {
-            if (error) {
-                console.error('Error executing query', error.stack);
-                res.status(500).send('Error executing query');
-            } else {
-                res.status(200).send('User deleted');
-            }
-        });
-    });
-};
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await User.destroy({ where: { user_id: id } });
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).send('Error deleting user');
+  }
+});
+
+module.exports = router;
