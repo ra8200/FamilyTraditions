@@ -56,3 +56,12 @@ Thumbs.db
 # IDE/Editor directories
 .idea/
 .vscode/
+
+# Database files
+*.sqlite
+
+# Backup files
+*.bak
+
+# MacOS files
+.DS_Store

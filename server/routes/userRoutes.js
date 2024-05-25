@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { User } = require('./models/User');
+const { User } = require('../models');
 
-// Define your user routes here
 router.post('/signup', async (req, res) => {
   try {
     const { clerk_user_id, username, first_name, last_name, email, profile_image_url } = req.body;
@@ -20,12 +19,13 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-router.get('/', (req, res) => {
-  res.json([
-    // Example data
-    { id: 1, name: 'User 1' },
-    { id: 2, name: 'User 2' },
-  ]);
+router.get('/', async (req, res) => {
+  try {
+    const users = await User.findAll();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 module.exports = router;
