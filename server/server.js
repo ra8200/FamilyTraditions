@@ -17,9 +17,9 @@ const app = express();
 app.use(express.json());
 
 // Import and use routes modules, passing the Express app and PostgreSQL pool
-require('./routes/users')(app, pool);
-require('./routes/recipeBooks')(app, pool);
-require('./routes/recipes')(app, pool);
+require('./routes/userRoutes')(app, pool);
+require('./routes/recipeBooksRoutes')(app, pool);
+require('./routes/recipesRoutes')(app, pool);
 
 // Specify the port to listen on, use environment variable or default to 3000
 const PORT = process.env.PORT || 3000;
