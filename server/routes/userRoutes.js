@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { User } = require('../models');
+const { requireAuth } = require('@clerk/clerk-sdk-node');
 
 router.post('/signup', async (req, res) => {
   try {
@@ -19,7 +20,7 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
+router.get('/', requireAuth(), async (req, res) => {
   try {
     const users = await User.findAll();
     res.json(users);
