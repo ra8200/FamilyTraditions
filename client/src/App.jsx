@@ -1,18 +1,23 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
+import { ClerkProvider, RedirectToSignIn, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import { View } from 'react-native';
-import { enableScreens } from 'react-native-screens';
 import AppNavigator from './navigation/AppNavigator';
 import 'react-native-url-polyfill/auto';
 
-enableScreens();
-
 const App = () => {
+  const CLERK_FRONTEND_API = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
+
   return (
-    <View style={{ flex: 1 }}>
-      <AppNavigator />
-      <StatusBar style="auto" />
-    </View>
+    <ClerkProvider frontendApi={CLERK_FRONTEND_API}>
+      <View style={{ flex: 1 }}>
+        <SignedIn>
+          <AppNavigator />
+        </SignedIn>
+        <SignedOut>
+          <RedirectToSignIn />
+        </SignedOut>
+      </View>
+    </ClerkProvider>
   );
 };
 
