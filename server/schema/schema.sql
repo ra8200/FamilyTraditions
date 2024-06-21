@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS recipes (
     instructions TEXT,
     recipe_book_id INT NOT NULL,
     creator_id INT NOT NULL,
+    recipes TEXT[], --recipe ids for recipes in this recipe book
     creation_date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     last_updated TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (recipe_book_id) REFERENCES recipe_books (recipe_book_id) ON DELETE CASCADE,
