@@ -3,9 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const { ClerkExpressRequireAuth } = require('@clerk/clerk-sdk-node');
-const { sequelize } = require('./models');
 const cloudinary = require('cloudinary').v2;
+const pool = require('./config/config');
 
 // Cloudinary configuration
 cloudinary.config({
@@ -21,17 +20,17 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 // Clerk middleware
-app.use(
-  ClerkExpressRequireAuth({
-    secretKey: process.env.CLERK_SECRET_KEY,
-  })
-);
+// app.use(
+//   ClerkExpressRequireAuth({
+//     secretKey: process.env.CLERK_SECRET_KEY,
+//   })
+// );
 
 // Import routes
 const userRoutes = require('./routes/userRoutes');
-const recipeRoutes = require('./routes/recipeRoutes');
+const recipeRoutes = require('./routes/recipesRoutes');
 const authRoutes = require('./routes/authRoutes');
-const recipeBookRoutes = require('./routes/recipeBookRoutes');
+const recipeBookRoutes = require('./routes/recipeBooksRoutes');
 
 app.use('/api/users', userRoutes);
 app.use('/api/recipes', recipeRoutes);
@@ -40,8 +39,6 @@ app.use('/api/recipeBooks', recipeBookRoutes);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, async () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  await sequelize.authenticate();
-  console.log('Database connected!');
 });

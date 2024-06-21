@@ -1,12 +1,12 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Button, Pressable } from 'react-native';
 import CustomAlert from '../../components/ui/CustomAlert';
-import { useSignUp, useUser } from '@clerk/clerk-expo';
+// import { useSignUp, useUser } from '@clerk/clerk-expo';
 import ImageUploader from '../../components/containers/ImageUploader';
 
 const CreateAccountScreen = ({ navigation }) => {
-  const { signUp } = useSignUp();
-  const { isSignedIn } = useUser();
+  // const { signUp } = useSignUp();
+  // const { isSignedIn } = useUser();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');

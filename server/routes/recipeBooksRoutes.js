@@ -1,14 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { RecipeBook, User } = require('../models');
+const pool = require('../config/config');
 const cloudinary = require('cloudinary').v2;
 
 router.get('/', async (req, res) => {
   try {
-    const recipeBooks = await RecipeBook.findAll({
-      include: [{ model: User, as: 'author' }]
-    });
-    res.json(recipeBooks);
+    const result = await pool.query('SELECT * FROM recipe_books');
+    res.json(result.rows);
   } catch (error) {
     res.status(500).send('Error fetching recipe books');
   }
@@ -18,13 +16,11 @@ router.post('/', async (req, res) => {
   const { name, description, user_id, image } = req.body;
   try {
     const uploadResponse = await cloudinary.uploader.upload(image);
-    const newRecipeBook = await RecipeBook.create({
-      name,
-      description,
-      author_id: user_id,
-      banner_image_url: uploadResponse.url,
-    });
-    res.status(201).json(newRecipeBook);
+    const result = await pool.query(
+      'INSERT INTO recipe_books (name, description, author_id, banner_image_url) VALUES ($1, $2, $3, $4) RETURNING *',
+      [name, description, user_id, uploadResponse.url]
+    );
+    res.status(201).json(result.rows[0]);
   } catch (error) {
     res.status(500).send('Error creating recipe book');
   }
@@ -39,11 +35,11 @@ router.put('/:id', async (req, res) => {
       const uploadResponse = await cloudinary.uploader.upload(image);
       imageUrl = uploadResponse.url;
     }
-    const updatedRecipeBook = await RecipeBook.update(
-      { name, description, author_id: user_id, banner_image_url: imageUrl },
-      { where: { recipe_book_id: id } }
+    const result = await pool.query(
+      'UPDATE recipe_books SET name = $1, description = $2, author_id = $3, banner_image_url = $4 WHERE recipe_book_id = $5 RETURNING *',
+      [name, description, user_id, imageUrl, id]
     );
-    res.json(updatedRecipeBook);
+    res.json(result.rows[0]);
   } catch (error) {
     res.status(500).send('Error updating recipe book');
   }
@@ -52,7 +48,7 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    await RecipeBook.destroy({ where: { recipe_book_id: id } });
+    await pool.query('DELETE FROM recipe_books WHERE recipe_book_id = $1', [id]);
     res.status(204).send();
   } catch (error) {
     res.status(500).send('Error deleting recipe book');

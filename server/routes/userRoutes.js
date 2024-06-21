@@ -1,42 +1,39 @@
 const express = require('express');
 const router = express.Router();
-const { User } = require('../models');
-const { requireAuth } = require('@clerk/clerk-sdk-node');
+const pool = require('../config/config');
+// const { requireAuth } = require('@clerk/clerk-sdk-node'); // Commented out for testing
 const cloudinary = require('cloudinary').v2;
 
 // Signup route
 router.post('/signup', async (req, res) => {
   try {
     const { clerk_user_id, username, first_name, last_name, email, profile_image_url } = req.body;
-    const newUser = await User.create({
-      clerk_user_id,
-      username,
-      first_name,
-      last_name,
-      email,
-      profile_image_url
-    });
-    res.status(201).json(newUser);
+    const result = await pool.query(
+      'INSERT INTO users (clerk_user_id, username, first_name, last_name, email, profile_image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      [clerk_user_id, username, first_name, last_name, email, profile_image_url]
+    );
+    res.status(201).json(result.rows[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // Get all users
-router.get('/', requireAuth(), async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const users = await User.findAll();
-    res.json(users);
+    const result = await pool.query('SELECT * FROM users');
+    res.json(result.rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // Get a single user by ID
-router.get('/:id', requireAuth(), async (req, res) => {
+router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await User.findByPk(id);
+    const result = await pool.query('SELECT * FROM users WHERE user_id = $1', [id]);
+    const user = result.rows[0];
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -47,26 +44,22 @@ router.get('/:id', requireAuth(), async (req, res) => {
 });
 
 // Create a new user
-router.post('/', requireAuth(), async (req, res) => {
+router.post('/', async (req, res) => {
   const { clerk_user_id, username, first_name, last_name, email, profileImage } = req.body;
   try {
     const uploadResponse = await cloudinary.uploader.upload(profileImage);
-    const newUser = await User.create({
-      clerk_user_id,
-      username,
-      first_name,
-      last_name,
-      email,
-      profile_image_url: uploadResponse.url,
-    });
-    res.status(201).json(newUser);
+    const result = await pool.query(
+      'INSERT INTO users (clerk_user_id, username, first_name, last_name, email, profile_image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      [clerk_user_id, username, first_name, last_name, email, uploadResponse.url]
+    );
+    res.status(201).json(result.rows[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // Update a user
-router.put('/:id', requireAuth(), async (req, res) => {
+router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { username, first_name, last_name, email, profileImage } = req.body;
   try {
@@ -75,21 +68,21 @@ router.put('/:id', requireAuth(), async (req, res) => {
       const uploadResponse = await cloudinary.uploader.upload(profileImage);
       imageUrl = uploadResponse.url;
     }
-    const updatedUser = await User.update(
-      { username, first_name, last_name, email, profile_image_url: imageUrl },
-      { where: { user_id: id } }
+    const result = await pool.query(
+      'UPDATE users SET username = $1, first_name = $2, last_name = $3, email = $4, profile_image_url = $5 WHERE user_id = $6 RETURNING *',
+      [username, first_name, last_name, email, imageUrl, id]
     );
-    res.json(updatedUser);
+    res.json(result.rows[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // Delete a user
-router.delete('/:id', requireAuth(), async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    await User.destroy({ where: { user_id: id } });
+    await pool.query('DELETE FROM users WHERE user_id = $1', [id]);
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: error.message });
