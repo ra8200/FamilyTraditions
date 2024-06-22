@@ -1,24 +1,28 @@
-// testConnection.js
-const postgres = require('postgres');
+const { Pool } = require('pg');
 require('dotenv').config();
 
-let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
+const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PGPORT } = process.env;
 
-const sql = postgres({
+const pool = new Pool({
   host: PGHOST,
   database: PGDATABASE,
-  username: PGUSER,
+  user: PGUSER,
   password: PGPASSWORD,
-  port: 5432,
-  ssl: 'require',
-  connection: {
-    options: `project=${ENDPOINT_ID}`,
-  },
+  port: PGPORT || 5432,
+  ssl: {
+    rejectUnauthorized: false 
+  }
 });
 
 async function getPgVersion() {
-  const result = await sql`select version()`;
-  console.log(result);
+  try {
+    const result = await pool.query('SELECT version()');
+    console.log(result.rows);
+  } catch (error) {
+    console.error('Error executing query', error.stack);
+  } finally {
+    pool.end();
+  }
 }
 
 getPgVersion();

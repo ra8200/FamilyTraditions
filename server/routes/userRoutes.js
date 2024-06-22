@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/config');
-// const { requireAuth } = require('@clerk/clerk-sdk-node'); // Commented out for testing
 const cloudinary = require('cloudinary').v2;
+// const { requireAuth } = require('@clerk/clerk-sdk-node'); // Commented out for testing
 
 // Signup route
 router.post('/signup', async (req, res) => {
