@@ -17,14 +17,11 @@ Family Traditions is a React Native application designed to help families preser
 
 ## Technical Overview
 
-- **Expo Go**: The app is built using Expo Go, a platform for universal React Native applications.
 - **React Native**: The app is built using React Native, a JavaScript framework for building mobile applications.
 - **Express**: The backend server is built using Express, a Node.js web application framework.
 - **Node.js**: The backend server is built using Node.js, a JavaScript runtime.
 - **Postgres/Neon**: The database is built using Postgres and Neon, a PostgreSQL client for Node.js.
-- **Clerk**: User authentication is handled by Clerk, a secure authentication service.
 - **Cloudinary**: Images are stored using Cloudinary, a cloud-based image management service.
-- **Sequelize**: Sequelize is used as the ORM for the database.
 
 ## License
 
