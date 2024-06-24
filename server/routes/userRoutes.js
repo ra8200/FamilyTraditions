@@ -8,6 +8,11 @@ const cloudinary = require('cloudinary').v2;
 router.post('/signup', async (req, res) => {
   try {
     const { clerk_user_id, username, first_name, last_name, email, profile_image_url } = req.body;
+
+    // Generating a Cloudinary signature
+    const timestamp = Math.round((new Date()).getTime() / 1000);
+    const signature = cloudinary.utils.api_sign_request({ timestamp: timestamp }, process.env.CLOUDINARY_API_SECRET);
+
     const result = await pool.query(
       'INSERT INTO users (clerk_user_id, username, first_name, last_name, email, profile_image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
       [clerk_user_id, username, first_name, last_name, email, profile_image_url]
