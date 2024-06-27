@@ -7,15 +7,15 @@ const cloudinary = require('cloudinary').v2;
 // Signup route
 router.post('/signup', async (req, res) => {
   try {
-    const { clerk_user_id, username, first_name, last_name, email, profile_image_url } = req.body;
+    const { user_id, clerk_user_id, username, first_name, last_name, email, profile_image_url } = req.body;
 
     // Generating a Cloudinary signature
     const timestamp = Math.round((new Date()).getTime() / 1000);
     const signature = cloudinary.utils.api_sign_request({ timestamp: timestamp }, process.env.CLOUDINARY_API_SECRET);
 
     const result = await pool.query(
-      'INSERT INTO users (clerk_user_id, username, first_name, last_name, email, profile_image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [clerk_user_id, username, first_name, last_name, email, profile_image_url]
+      'INSERT INTO users (user_id, clerk_user_id, username, first_name, last_name, email, profile_image_url) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+      [user_id, clerk_user_id, username, first_name, last_name, email, profile_image_url]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -50,12 +50,12 @@ router.get('/:id', async (req, res) => {
 
 // Create a new user
 router.post('/', async (req, res) => {
-  const { clerk_user_id, username, first_name, last_name, email, profileImage } = req.body;
+  const { user_id, clerk_user_id, username, first_name, last_name, email, profileImage } = req.body;
   try {
     const uploadResponse = await cloudinary.uploader.upload(profileImage);
     const result = await pool.query(
-      'INSERT INTO users (clerk_user_id, username, first_name, last_name, email, profile_image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-      [clerk_user_id, username, first_name, last_name, email, uploadResponse.url]
+      'INSERT INTO users (user_id, clerk_user_id, username, first_name, last_name, email, profile_image_url) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+      [user_id, clerk_user_id, username, first_name, last_name, email, uploadResponse.url]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
