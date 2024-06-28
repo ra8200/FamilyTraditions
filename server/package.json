@@ -5,7 +5,8 @@
     "main": "server.js",
     "scripts": {
         "start": "node server.js",
-        "dev": "nodemon server.js"
+        "dev": "nodemon server.js",
+        "get-schema": "node scripts/getSchema.js"
     },
     "dependencies": {
         "@clerk/clerk-sdk-node": "^5.0.9",
