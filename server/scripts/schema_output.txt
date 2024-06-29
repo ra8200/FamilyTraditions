@@ -1,30 +1,23 @@
 [
   {
-    "table_name": "SequelizeMeta",
-    "column_name": "name",
-    "data_type": "character varying",
-    "is_nullable": "NO",
-    "column_default": null
-  },
-  {
-    "table_name": "playing_with_neon",
-    "column_name": "id",
+    "table_name": "permissions_matrix",
+    "column_name": "matrix_id",
     "data_type": "integer",
     "is_nullable": "NO",
-    "column_default": "nextval('playing_with_neon_id_seq'::regclass)"
+    "column_default": "nextval('permissions_matrix_matrix_id_seq'::regclass)"
   },
   {
-    "table_name": "playing_with_neon",
-    "column_name": "name",
-    "data_type": "text",
+    "table_name": "permissions_matrix",
+    "column_name": "role_id",
+    "data_type": "integer",
     "is_nullable": "NO",
     "column_default": null
   },
   {
-    "table_name": "playing_with_neon",
-    "column_name": "value",
-    "data_type": "real",
-    "is_nullable": "YES",
+    "table_name": "permissions_matrix",
+    "column_name": "permission_name",
+    "data_type": "character varying",
+    "is_nullable": "NO",
     "column_default": null
   },
   {
@@ -50,7 +43,14 @@
   },
   {
     "table_name": "recipe_books",
-    "column_name": "owner_id",
+    "column_name": "banner_image_url",
+    "data_type": "character varying",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_name": "recipe_books",
+    "column_name": "author_id",
     "data_type": "integer",
     "is_nullable": "NO",
     "column_default": null
@@ -66,15 +66,43 @@
     "table_name": "recipe_books",
     "column_name": "last_updated",
     "data_type": "timestamp with time zone",
+    "is_nullable": "NO",
+    "column_default": "CURRENT_TIMESTAMP"
+  },
+  {
+    "table_name": "recipe_books",
+    "column_name": "recipes",
+    "data_type": "ARRAY",
     "is_nullable": "YES",
     "column_default": null
   },
   {
-    "table_name": "recipe_books",
-    "column_name": "banner_image_url",
-    "data_type": "character varying",
-    "is_nullable": "YES",
+    "table_name": "recipe_photos",
+    "column_name": "photo_id",
+    "data_type": "integer",
+    "is_nullable": "NO",
+    "column_default": "nextval('recipe_photos_photo_id_seq'::regclass)"
+  },
+  {
+    "table_name": "recipe_photos",
+    "column_name": "recipe_id",
+    "data_type": "integer",
+    "is_nullable": "NO",
     "column_default": null
+  },
+  {
+    "table_name": "recipe_photos",
+    "column_name": "cloudinary_url",
+    "data_type": "character varying",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_name": "recipe_photos",
+    "column_name": "uploaded_at",
+    "data_type": "timestamp with time zone",
+    "is_nullable": "NO",
+    "column_default": "CURRENT_TIMESTAMP"
   },
   {
     "table_name": "recipes",
@@ -99,14 +127,28 @@
   },
   {
     "table_name": "recipes",
+    "column_name": "ingredients",
+    "data_type": "ARRAY",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_name": "recipes",
     "column_name": "instructions",
-    "data_type": "jsonb",
+    "data_type": "text",
     "is_nullable": "YES",
     "column_default": null
   },
   {
     "table_name": "recipes",
     "column_name": "recipe_book_id",
+    "data_type": "integer",
+    "is_nullable": "NO",
+    "column_default": null
+  },
+  {
+    "table_name": "recipes",
+    "column_name": "creator_id",
     "data_type": "integer",
     "is_nullable": "NO",
     "column_default": null
@@ -120,30 +162,44 @@
   },
   {
     "table_name": "recipes",
-    "column_name": "last_updated_date",
+    "column_name": "last_updated",
     "data_type": "timestamp with time zone",
-    "is_nullable": "YES",
+    "is_nullable": "NO",
     "column_default": "CURRENT_TIMESTAMP"
   },
   {
-    "table_name": "recipes",
-    "column_name": "image_url",
+    "table_name": "roles",
+    "column_name": "role_id",
+    "data_type": "integer",
+    "is_nullable": "NO",
+    "column_default": "nextval('roles_role_id_seq'::regclass)"
+  },
+  {
+    "table_name": "roles",
+    "column_name": "role_name",
     "data_type": "character varying",
-    "is_nullable": "YES",
+    "is_nullable": "NO",
     "column_default": null
   },
   {
-    "table_name": "recipes",
-    "column_name": "image_urls",
-    "data_type": "jsonb",
-    "is_nullable": "YES",
+    "table_name": "user_account_permissions",
+    "column_name": "account_permission_id",
+    "data_type": "integer",
+    "is_nullable": "NO",
+    "column_default": "nextval('user_account_permissions_account_permission_id_seq'::regclass)"
+  },
+  {
+    "table_name": "user_account_permissions",
+    "column_name": "user_id",
+    "data_type": "integer",
+    "is_nullable": "NO",
     "column_default": null
   },
   {
-    "table_name": "recipes",
-    "column_name": "ingredients",
-    "data_type": "ARRAY",
-    "is_nullable": "YES",
+    "table_name": "user_account_permissions",
+    "column_name": "permission_name",
+    "data_type": "character varying",
+    "is_nullable": "NO",
     "column_default": null
   },
   {
@@ -155,13 +211,6 @@
   },
   {
     "table_name": "user_has_permission",
-    "column_name": "recipe_book_id",
-    "data_type": "integer",
-    "is_nullable": "NO",
-    "column_default": null
-  },
-  {
-    "table_name": "user_has_permission",
     "column_name": "user_id",
     "data_type": "integer",
     "is_nullable": "NO",
@@ -169,10 +218,17 @@
   },
   {
     "table_name": "user_has_permission",
-    "column_name": "permission_type",
-    "data_type": "character varying",
+    "column_name": "recipe_book_id",
+    "data_type": "integer",
     "is_nullable": "NO",
-    "column_default": "'READ'::character varying"
+    "column_default": null
+  },
+  {
+    "table_name": "user_has_permission",
+    "column_name": "role_id",
+    "data_type": "integer",
+    "is_nullable": "NO",
+    "column_default": null
   },
   {
     "table_name": "users",
@@ -183,22 +239,15 @@
   },
   {
     "table_name": "users",
-    "column_name": "username",
+    "column_name": "clerk_user_id",
     "data_type": "character varying",
     "is_nullable": "NO",
     "column_default": null
   },
   {
     "table_name": "users",
-    "column_name": "hashed_password",
-    "data_type": "text",
-    "is_nullable": "NO",
-    "column_default": null
-  },
-  {
-    "table_name": "users",
-    "column_name": "salt",
-    "data_type": "text",
+    "column_name": "username",
+    "data_type": "character varying",
     "is_nullable": "NO",
     "column_default": null
   },
@@ -225,6 +274,13 @@
   },
   {
     "table_name": "users",
+    "column_name": "profile_image_url",
+    "data_type": "character varying",
+    "is_nullable": "YES",
+    "column_default": null
+  },
+  {
+    "table_name": "users",
     "column_name": "creation_date",
     "data_type": "timestamp with time zone",
     "is_nullable": "NO",
@@ -234,13 +290,6 @@
     "table_name": "users",
     "column_name": "last_login",
     "data_type": "timestamp with time zone",
-    "is_nullable": "YES",
-    "column_default": null
-  },
-  {
-    "table_name": "users",
-    "column_name": "profile_image_url",
-    "data_type": "character varying",
     "is_nullable": "YES",
     "column_default": null
   }

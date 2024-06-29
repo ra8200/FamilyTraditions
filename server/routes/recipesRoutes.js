@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
   try {
     const uploadResponse = await cloudinary.uploader.upload(image);
     const result = await pool.query(
-      'INSERT INTO recipes (name, description, ingredients, instructions, recipe_book_id, creator_id, image_url) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+      'INSERT INTO recipes (name, description, ingredients, instructions, recipe_book_id, creator_id, image_urls) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
       [name, description, ingredients, instructions, recipe_book_id, creator_id, uploadResponse.url]
     );
     res.status(201).json(result.rows[0]);
@@ -36,7 +36,7 @@ router.put('/:id', async (req, res) => {
       imageUrl = uploadResponse.url;
     }
     const result = await pool.query(
-      'UPDATE recipes SET name = $1, description = $2, ingredients = $3, instructions = $4, recipe_book_id = $5, image_url = $6 WHERE recipe_id = $7 RETURNING *',
+      'UPDATE recipes SET name = $1, description = $2, ingredients = $3, instructions = $4, recipe_book_id = $5, image_urls = $6, last_updated = CURRENT_TIMESTAMP WHERE recipe_id = $7 RETURNING *',
       [name, description, ingredients, instructions, recipe_book_id, imageUrl, id]
     );
     res.json(result.rows[0]);

@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-// const { requireAuth } = require('@clerk/clerk-sdk-node');
+const pool = require('../config/config');
 
-// Middleware to verify Clerk token
+// Middleware to verify token
 // router.use(requireAuth());
 
-// Issue Clerk token for authenticated user
+// Issue token for authenticated user
 router.post('/issue-token', async (req, res) => {
   try {
     const { userId } = req.auth;

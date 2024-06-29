@@ -13,12 +13,12 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { name, description, user_id, image } = req.body;
+  const { name, description, author_id, image } = req.body;
   try {
     const uploadResponse = await cloudinary.uploader.upload(image);
     const result = await pool.query(
       'INSERT INTO recipe_books (name, description, author_id, banner_image_url) VALUES ($1, $2, $3, $4) RETURNING *',
-      [name, description, user_id, uploadResponse.url]
+      [name, description, author_id, uploadResponse.url]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
-  const { name, description, user_id, image } = req.body;
+  const { name, description, author_id, image } = req.body;
   try {
     let imageUrl;
     if (image) {
@@ -36,8 +36,8 @@ router.put('/:id', async (req, res) => {
       imageUrl = uploadResponse.url;
     }
     const result = await pool.query(
-      'UPDATE recipe_books SET name = $1, description = $2, author_id = $3, banner_image_url = $4 WHERE recipe_book_id = $5 RETURNING *',
-      [name, description, user_id, imageUrl, id]
+      'UPDATE recipe_books SET name = $1, description = $2, author_id = $3, banner_image_url = $4, last_updated = CURRENT_TIMESTAMP WHERE recipe_book_id = $5 RETURNING *',
+      [name, description, author_id, imageUrl, id]
     );
     res.json(result.rows[0]);
   } catch (error) {
