@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/config');
-const cloudinary = require('cloudinary').v2;
+const cloudinary = require('../config/cloudinaryConfig');  // Ensure this is correctly imported
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 router.get('/', async (req, res) => {
   try {
@@ -12,27 +14,30 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
-  const { name, description, author_id, image } = req.body;
+router.post('/', upload.single('image'), async (req, res) => {
+  const { name, description, author_id } = req.body;
+  const image = req.file;
   try {
-    const uploadResponse = await cloudinary.uploader.upload(image);
+    const uploadResponse = await cloudinary.uploader.upload(image.path);
     const result = await pool.query(
       'INSERT INTO recipe_books (name, description, author_id, banner_image_url) VALUES ($1, $2, $3, $4) RETURNING *',
       [name, description, author_id, uploadResponse.url]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
-    res.status(500).send('Error creating recipe book');
+    console.error('Error creating recipe book:', error.message);
+    res.status(500).json({ error: error.message });
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', upload.single('image'), async (req, res) => {
   const { id } = req.params;
-  const { name, description, author_id, image } = req.body;
+  const { name, description, author_id } = req.body;
+  const image = req.file;
   try {
     let imageUrl;
     if (image) {
-      const uploadResponse = await cloudinary.uploader.upload(image);
+      const uploadResponse = await cloudinary.uploader.upload(image.path);
       imageUrl = uploadResponse.url;
     }
     const result = await pool.query(
@@ -41,6 +46,7 @@ router.put('/:id', async (req, res) => {
     );
     res.json(result.rows[0]);
   } catch (error) {
+    console.error('Error updating recipe book:', error.message);
     res.status(500).send('Error updating recipe book');
   }
 });

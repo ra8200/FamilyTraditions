@@ -3,17 +3,11 @@ require('dotenv').config();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const cloudinary = require('cloudinary').v2;
 const pool = require('./config/config');
 // const ClerkExpressRequireAuth = require('@clerk/clerk-sdk-express').ClerkExpressRequireAuth;
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
 const app = express();
+const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(bodyParser.json());

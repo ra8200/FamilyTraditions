@@ -6,7 +6,14 @@ const cloudinary = require('cloudinary').v2;
 // Signup route
 router.post('/signup', async (req, res) => {
   try {
-    const { clerk_user_id, username, first_name, last_name, email, profile_image_url } = req.body;
+    const { clerk_user_id, username, first_name, last_name, email, profileImage } = req.body;
+
+    let profile_image_url = '';
+    if (profileImage) {
+      const uploadResponse = await cloudinary.uploader.upload(profileImage);
+      profile_image_url = uploadResponse.url;
+    }
+
     const result = await pool.query(
       'INSERT INTO users (clerk_user_id, username, first_name, last_name, email, profile_image_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
       [clerk_user_id, username, first_name, last_name, email, profile_image_url]
