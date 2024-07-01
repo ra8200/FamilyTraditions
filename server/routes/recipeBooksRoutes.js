@@ -3,7 +3,10 @@ const router = express.Router();
 const pool = require('../config/config');
 const cloudinary = require('../config/cloudinaryConfig');  // Ensure this is correctly imported
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const { uploadImage } = require('../services/imageServices');
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 router.get('/', async (req, res) => {
   try {
@@ -18,10 +21,10 @@ router.post('/', upload.single('image'), async (req, res) => {
   const { name, description, author_id } = req.body;
   const image = req.file;
   try {
-    const uploadResponse = await cloudinary.uploader.upload(image.path);
+    const uploadResponse = await uploadImage(image.buffer);
     const result = await pool.query(
       'INSERT INTO recipe_books (name, description, author_id, banner_image_url) VALUES ($1, $2, $3, $4) RETURNING *',
-      [name, description, author_id, uploadResponse.url]
+      [name, description, author_id, uploadResponse]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -37,8 +40,7 @@ router.put('/:id', upload.single('image'), async (req, res) => {
   try {
     let imageUrl;
     if (image) {
-      const uploadResponse = await cloudinary.uploader.upload(image.path);
-      imageUrl = uploadResponse.url;
+      imageUrl = await uploadImage(image.buffer);
     }
     const result = await pool.query(
       'UPDATE recipe_books SET name = $1, description = $2, author_id = $3, banner_image_url = $4, last_updated = CURRENT_TIMESTAMP WHERE recipe_book_id = $5 RETURNING *',
