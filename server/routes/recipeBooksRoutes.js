@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/config');
-const cloudinary = require('../config/cloudinaryConfig');  // Ensure this is correctly imported
+const cloudinary = require('../config/cloudinaryConfig');
 const multer = require('multer');
 const { uploadImage } = require('../services/imageServices');
 
@@ -42,9 +42,21 @@ router.put('/:id', upload.single('image'), async (req, res) => {
     if (image) {
       imageUrl = await uploadImage(image.buffer);
     }
+
+    const existingRecipeBook = await pool.query(
+      'SELECT banner_image_url FROM recipe_books WHERE recipe_book_id = $1',
+      [id]
+    );
+
+    if (existingRecipeBook.rows.length === 0) {
+      return res.status(404).json({ message: 'Recipe book not found' });
+    }
+
+    const bannerImageUrl = imageUrl || existingRecipeBook.rows[0].banner_image_url;
+
     const result = await pool.query(
       'UPDATE recipe_books SET name = $1, description = $2, author_id = $3, banner_image_url = $4, last_updated = CURRENT_TIMESTAMP WHERE recipe_book_id = $5 RETURNING *',
-      [name, description, author_id, imageUrl, id]
+      [name, description, author_id, bannerImageUrl, id]
     );
     res.json(result.rows[0]);
   } catch (error) {
