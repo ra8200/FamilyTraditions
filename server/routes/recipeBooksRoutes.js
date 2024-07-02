@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/config');
-const cloudinary = require('../config/cloudinaryConfig');
 const multer = require('multer');
 const { uploadImage } = require('../services/imageServices');
 
