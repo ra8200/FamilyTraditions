@@ -8,14 +8,15 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // Signup route
-router.post('/signup', async (req, res) => {
+router.post('/signup', upload.single('profileImage'), async (req, res) => {
   try {
-    const { clerk_user_id, username, first_name, last_name, email, profileImage } = req.body;
+    const { clerk_user_id, username, first_name, last_name, email } = req.body;
+    const profileImage = req.file;
 
     let profile_image_url = '';
     if (profileImage) {
-      const uploadResponse = await cloudinary.uploader.upload(profileImage);
-      profile_image_url = uploadResponse.url;
+      const uploadResponse = await uploadImage(profileImage.buffer);
+      profile_image_url = uploadResponse;
     }
 
     const result = await pool.query(
@@ -28,7 +29,7 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// Get all users
+// Read (get) all users
 router.get('/', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM users');
@@ -53,7 +54,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Create a new user
+// Post (create) a new user
 router.post('/', async (req, res) => {
   const { clerk_user_id, username, first_name, last_name, email, profileImage } = req.body;
   try {
@@ -68,20 +69,50 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Update a user
-router.put('/:id', async (req, res) => {
+// Put (update) a user
+router.put('/:id', upload.single('profileImage'), async (req, res) => {
   const { id } = req.params;
-  const { username, first_name, last_name, email, profileImage } = req.body;
+  const { username, first_name, last_name, email } = req.body;
+  const profileImage = req.file;
+
   try {
-    let imageUrl;
+    const fields = { username, first_name, last_name, email };
+    let newImageUrl = null;
+
+    // Retrieve the current profile image URL
+    const userResult = await pool.query('SELECT profile_image_url FROM users WHERE user_id = $1', [id]);
+    const currentImageUrl = userResult.rows[0]?.profile_image_url;
+
     if (profileImage) {
-      const uploadResponse = await cloudinary.uploader.upload(profileImage);
-      imageUrl = uploadResponse.url;
+      const uploadResponse = await uploadImage(profileImage.buffer);
+      newImageUrl = uploadResponse;
+      fields.profile_image_url = newImageUrl;
     }
-    const result = await pool.query(
-      'UPDATE users SET username = $1, first_name = $2, last_name = $3, email = $4, profile_image_url = $5 WHERE user_id = $6 RETURNING *',
-      [username, first_name, last_name, email, imageUrl, id]
-    );
+
+    // Filter out undefined fields
+    const filteredFields = Object.entries(fields).filter(([key, value]) => value !== undefined);
+
+    if (filteredFields.length === 0) {
+      return res.status(400).json({ error: 'No fields provided for update' });
+    }
+
+    const setClause = filteredFields.map(([key], index) => `${key} = $${index + 1}`).join(', ');
+    const values = filteredFields.map(([, value]) => value);
+    values.push(id);
+
+    const query = `UPDATE users SET ${setClause} WHERE user_id = $${values.length} RETURNING *`;
+
+    const result = await pool.query(query, values);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Delete the old profile image from Cloudinary if a new image was uploaded
+    if (profileImage && currentImageUrl) {
+      await deleteImage(currentImageUrl);
+    }
+
     res.json(result.rows[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -96,7 +127,9 @@ router.delete('/:id', async (req, res) => {
 
     if (result.rows.length > 0) {
       const cloudinaryUrl = result.rows[0].profile_image_url;
-      await deleteImageFromCloudinary(cloudinaryUrl);
+      if (cloudinaryUrl) {
+        await deleteImage(cloudinaryUrl);
+      }
 
       await pool.query('DELETE FROM users WHERE user_id = $1', [id]);
     }
