@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/config');
 const multer = require('multer');
-const { uploadImage } = require('../services/imageServices');
+const { uploadImage, deleteImage } = require('../services/imageServices');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -67,9 +67,18 @@ router.put('/:id', upload.single('image'), async (req, res) => {
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    await pool.query('DELETE FROM recipe_books WHERE recipe_book_id = $1', [id]);
+    const result = await pool.query('SELECT banner_image_url FROM recipe_books WHERE recipe_book_id = $1', [id]);
+
+    if (result.rows.length > 0) {
+      const cloudinaryUrl = result.rows[0].banner_image_url;
+      await deleteImage(cloudinaryUrl);
+
+      await pool.query('DELETE FROM recipe_books WHERE recipe_book_id = $1', [id]);
+    }
+
     res.status(204).send();
   } catch (error) {
+    console.error('Error deleting recipe book:', error.message);
     res.status(500).send('Error deleting recipe book');
   }
 });

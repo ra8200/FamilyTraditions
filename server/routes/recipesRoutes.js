@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/config');
 const multer = require('multer');
-const { uploadImage } = require('../services/imageServices');
+const { uploadImage, deleteImage } = require('../services/imageServices');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -141,21 +141,15 @@ router.delete('/:id', async (req, res) => {
     try {
       await client.query('BEGIN');
 
-      // Fetch the Cloudinary public_id of the image
       const photoResult = await client.query('SELECT cloudinary_url FROM recipe_photos WHERE recipe_id = $1', [id]);
       
       if (photoResult.rows.length > 0) {
         const cloudinaryUrl = photoResult.rows[0].cloudinary_url;
-        const publicId = cloudinaryUrl.split('/').pop().split('.')[0]; // Extract public_id from URL
+        await deleteImage(cloudinaryUrl);
 
-        // Delete the image from Cloudinary
-        await cloudinary.uploader.destroy(publicId);
-
-        // Delete the photo record from the database
         await client.query('DELETE FROM recipe_photos WHERE recipe_id = $1', [id]);
       }
 
-      // Delete the recipe
       const result = await client.query('DELETE FROM recipes WHERE recipe_id = $1 RETURNING *', [id]);
 
       if (result.rows.length === 0) {

@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/config');
-const cloudinary = require('cloudinary').v2;
+const multer = require('multer');
+const { uploadImage, deleteImage } = require('../services/imageServices');
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 // Signup route
 router.post('/signup', async (req, res) => {
@@ -88,10 +92,19 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    await pool.query('DELETE FROM users WHERE user_id = $1', [id]);
+    const result = await pool.query('SELECT profile_image_url FROM users WHERE user_id = $1', [id]);
+
+    if (result.rows.length > 0) {
+      const cloudinaryUrl = result.rows[0].profile_image_url;
+      await deleteImageFromCloudinary(cloudinaryUrl);
+
+      await pool.query('DELETE FROM users WHERE user_id = $1', [id]);
+    }
+
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error deleting user:', error.message);
+    res.status(500).send('Error deleting user');
   }
 });
 
