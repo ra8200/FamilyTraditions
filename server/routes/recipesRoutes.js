@@ -22,20 +22,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get a single recipe
-// router.get('/:id', async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const result = await pool.query('SELECT * FROM recipes WHERE recipe_id = $1', [id]);
-//     if (result.rows.length === 0) {
-//       return res.status(404).json({ message: 'Recipe not found' });
-//     }
-//     res.json(result.rows[0]);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
-
 // POST (create) a new recipe
 router.post('/', upload.single('image'), async (req, res) => {
   const { name, description, ingredients, instructions, recipe_book_id, creator_id } = req.body;
