@@ -4,7 +4,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const pool = require('./config/config');
-// const ClerkExpressRequireAuth = require('@clerk/clerk-sdk-express').ClerkExpressRequireAuth;
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -13,13 +12,6 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(express.json());
-
-// Clerk middleware
-// app.use(
-//   ClerkExpressRequireAuth({
-//     secretKey: process.env.CLERK_SECRET_KEY,
-//   })
-// );
 
 // Import routes
 const userRoutes = require('./routes/userRoutes');
